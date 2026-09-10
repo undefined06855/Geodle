@@ -1,0 +1,67 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+main {
+    height: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+    background-color: #272737;
+
+    > h1 {
+        font-family: "Ultra", sans-serif;
+        font-weight: normal;
+        font-size: 40px;
+
+        color: #d9d9e6;
+        text-shadow: 0px 0px 40px #00000041;
+    }
+
+    > #guessed-box {
+        max-width: 1000px;
+        width: calc(90% - 20px);
+        height: 700px;
+
+        background-color: #1e1e29;
+        border: 2px solid #3b3b50;
+        box-shadow: 0px 0px 40px 0px #00000041;
+        border-radius: 20px;
+
+        > .guess {
+        }
+    }
+
+    > input#guess {
+        max-width: 600px;
+        width: calc(90% - 40px);
+        padding: 7px;
+
+        background-color: #1e1e29;
+        border: 2px solid #3b3b50;
+        box-shadow: 0px 0px 20px 0px #00000041;
+        border-radius: 10px;
+
+        font-family: "Quicksand", sans-serif;
+        font-size: 35px;
+        text-align: center;
+        color: white;
+
+        &:focus-visible {
+            border: 2px solid #7b7b96;
+            outline: none;
+        }
+    }
+}
+
+/*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/

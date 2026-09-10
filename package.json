@@ -1,0 +1,22 @@
+{
+    "name": "geodle",
+    "module": "main.ts",
+    "type": "module",
+    "private": true,
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^7.0.2"
+    },
+    "dependencies": {
+        "@types/unzipper": "^0.10.11",
+        "brain": "undefined06855/brain",
+        "result-js": "undefined06855/result-js",
+        "unzipper": "^0.12.5"
+    },
+    "scripts": {
+        "format": "bunx prettier . --write",
+        "geodle": "bun main"
+    }
+}
