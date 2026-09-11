@@ -229,7 +229,7 @@
 }
 
 #game-over-box {
-    justify-content: center;
+    justify-content: safe center;
     align-items: center;
 
     position: fixed;
