@@ -74,7 +74,7 @@ export default class Geodle {
 
         // seed the rng with the current day
         let daysSinceStart = today.since(this.zerothDay).total("days");
-        jsc.setRandomSeed(Number(Bun.hash(daysSinceStart.toString(16))));
+        jsc.setRandomSeed(Number(Bun.hash(daysSinceStart.toString(16) + process.env.SEED_OFFSET)));
 
         console.info(`geodle #${daysSinceStart}`);
 
