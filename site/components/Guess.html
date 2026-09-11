@@ -33,8 +33,11 @@
             <div class="mod-title">
                 <!--{{
                     let anchor = document.createElement("a");
-                    anchor.href = `https://geode-sdk.org/mods/${params.mod.id}`;
                     anchor.innerText = params.mod.name;
+                    if (params.mod.id != "???.???") {
+                        anchor.href = `https://geode-sdk.org/mods/${params.mod.id}`;
+                    }
+
                     return anchor;
                 }}-->
             </div>
@@ -50,8 +53,11 @@
                 parent.classList.add("overlay");
 
                 let anchor = document.createElement("a");
-                anchor.href = `https://geode-sdk.org/developers/${params.mod.developerID}`;
                 anchor.innerText = params.mod.developer;
+                if (params.mod.developerID != 0) {
+                    anchor.href = `https://geode-sdk.org/developers/${params.mod.developerID}`;
+                }
+
                 parent.appendChild(anchor);
 
                 if (params.addTick) {
@@ -100,9 +106,9 @@
         <!--{{ return document.createTextNode(params.mod.downloads) }}-->
         <!--{{
             if (geodleData.mod.downloads > params.mod.downloads) {
-                return document.createTextNode("&nbsp;&bull;&nbsp;(Higher!)");
+                return document.createTextNode("&nbsp;&bull;&nbsp;(Higher)");
             } else if (geodleData.mod.downloads < params.mod.downloads) {
-                return document.createTextNode("&nbsp;&bull;&nbsp;(Lower!)");
+                return document.createTextNode("&nbsp;&bull;&nbsp;(Lower)");
             }
         }}-->
     </div>
@@ -136,7 +142,18 @@
                 relative = `${~~(diff / 31536000)} years ago`;
             }
 
+            // lol
+            if (parseInt(relative) == 1) relative = relative.replace("s", "");
+
             return document.createTextNode(relative);
+        }}-->
+        <!--{{
+            let offset = new Date(params.mod.updateDate).getTime() - new Date(geodleData.mod.updateDate).getTime();
+            if (offset < 0) {
+                return document.createTextNode("&nbsp;&bull;&nbsp;(Newer)");
+            } else if (offset > 0) {
+                return document.createTextNode("&nbsp;&bull;&nbsp;(Older)");
+            }
         }}-->
     </div>
 </div>
