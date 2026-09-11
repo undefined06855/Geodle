@@ -2,7 +2,10 @@
     <!--{{
         if (params.results) return;
 
-        params.results = `Geodle #${geodleData.day} on ${new Date(geodleData.date).toDateString()} `
+        let [year, month, day] = geodleData.date.split("-").map(Number);
+        let date = new Date(year, month - 1, day);
+
+        params.results = `Geodle #${geodleData.day} on ${date.toDateString()} `
 
         let lastMod = params.guessHistory[params.guessHistory.length - 1];
         if (lastMod.id == geodleData.mod.id) {
