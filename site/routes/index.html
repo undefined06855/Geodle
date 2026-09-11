@@ -1,19 +1,21 @@
-<main>
+<main class="col">
     <!-- {{ return context.params["Geodle.self"].generateDataHTML(); }} -->
 
     <h1><!--{{ param: Geodle.title }}--></h1>
 
-    <div id="code-box">
-        <!-- {{ param: Geodle.code }} -->
+    <!--{{ component: InfoBox }}-->
+
+    <div id="main-row" class="row">
+        <!--{{ component: CodeBox }}-->
+        <!--{{ component: GuessedBox }}-->
     </div>
 
-    <div id="guessed-box"></div>
-    <div id="guess-box">
-        <input type="text" name="Guess" id="guess" placeholder="Enter a mod name..." />
-        <div id="autofill"></div>
-    </div>
+    <!--{{ component: GuessBox }}-->
 
+    <!-- {{ dependency: Tick }}-->
+    <!-- {{ dependency: Cross }}-->
     <!-- {{ dependency: Guess }}-->
     <!-- {{ dependency: AutofillSuggestion }}-->
+    <!-- {{ dependency: GameOverBox }}-->
     <script src="main.js" type="module"></script>
 </main>

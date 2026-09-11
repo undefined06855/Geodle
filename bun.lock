@@ -8,6 +8,7 @@
         "@types/unzipper": "^0.10.11",
         "brain": "undefined06855/brain",
         "fuse.js": "^7.5.0",
+        "highlight.js": "^11.12.0",
         "result-js": "undefined06855/result-js",
         "unzipper": "^0.12.5",
       },
@@ -72,7 +73,7 @@
 
     "bluebird": ["bluebird@3.7.2", "", {}, "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg=="],
 
-    "brain": ["brain@github:undefined06855/brain#5eab543", { "dependencies": { "happy-dom": "^20.11.6", "result-js": "https://github.com/undefined06855/result-js" }, "peerDependencies": { "typescript": "^5" } }, "undefined06855-Brain-5eab543", "sha512-isiIW1x7dNTTX0FryzaMzPFu+JsfGzfN2F9YpoTnSv1uG2rMXxUwJALOQexy/OtnhbfDaPDheREb5PA1jLjiIw=="],
+    "brain": ["brain@github:undefined06855/brain#ffa66ca", { "dependencies": { "happy-dom": "^20.11.6", "result-js": "https://github.com/undefined06855/result-js" }, "peerDependencies": { "typescript": "^5" } }, "undefined06855-Brain-ffa66ca", "sha512-CQdOiHjm9AJXBxvJ0S+D87oEbK740m7Fx0L/wvNAvJpIgu0jKClzyKCSUAvJShv+7dQ7htrjbSHdwIu5n/VURg=="],
 
     "buffer-image-size": ["buffer-image-size@0.6.4", "", { "dependencies": { "@types/node": "*" } }, "sha512-nEh+kZOPY1w+gcCMobZ6ETUp9WfibndnosbpwB1iJk/8Gt5ZF2bhS6+B6bPYz424KtwsR6Rflc3tCz1/ghX2dQ=="],
 
@@ -91,6 +92,8 @@
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
     "happy-dom": ["happy-dom@20.14.3", "", { "dependencies": { "@types/node": ">=20.0.0", "@types/whatwg-mimetype": "^3.0.2", "@types/ws": "^8.18.1", "buffer-image-size": "^0.6.4", "entities": "^7.0.1", "whatwg-mimetype": "^3.0.0", "ws": "^8.21.0" } }, "sha512-0KMb/Eh8rsd+aMNkOk5h8LkAjo9Na1aksnEGmsuZf+GXl6UkAdIi0VbUHU7d59lXhNmawODgwwuCMiZpCxwwCw=="],
+
+    "highlight.js": ["highlight.js@11.12.0", "", {}, "sha512-nbfWpyRMcMrPMmDwJB+dhX/eiaPKtc2RB+0QZskqJ3WjRA/FDS0e9hZrx8EC/lbEv8gXy98FcDbNa/dspAaJMg=="],
 
     "inherits": ["inherits@2.0.4", "", {}, "sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ=="],
 

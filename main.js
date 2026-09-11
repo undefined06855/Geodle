@@ -9,6 +9,8 @@ await geodle.init();
 
 const server = Bun.serve({
     routes: {
+        "/hljs.css": Bun.file("node_modules/highlight.js/styles/vs-dark.min.css"),
+
         "/fuse/:file": req => {
             let file = Bun.file(`node_modules/fuse.js/dist/${req.params.file}`);
             return new Response(file, { headers: { "Content-Type": file.type } });

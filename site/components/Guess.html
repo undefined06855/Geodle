@@ -1,10 +1,142 @@
-<div class="guess">
+<div class="guess row-compact">
     <!--{{
-        let icon = new Image();
-        icon.src = `https://api.geode-sdk.org/v1/mods/${params.modID}/logo`;
-        return icon;
+        console.log("created guess:");
+        console.log(params);
+
+        params.addTick = params.addTick ?? true;
     }}-->
 
-    <!--{{ param: modName }}-->
-    <!--{{ param: modID }}-->
+    <!--{{
+        let parent = document.createElement("div");
+        parent.classList.add("overlay");
+
+        let icon = new Image();
+        icon.id = "mod-icon";
+
+        if (params.mod.id == "???.???") {
+            icon.src = `assets/gd-logo.png`;
+        } else {
+            icon.src = `https://api.geode-sdk.org/v1/mods/${params.mod.id}/logo`;
+        }
+
+        parent.appendChild(icon);
+
+        if (params.mod.id != geodleData.mod.id && params.addTick) {
+            parent.appendChild(Cross());
+        }
+
+        return parent;
+    }}-->
+
+    <div class="col-compact" style="height: 100%; gap: 4px">
+        <div class="row-compact">
+            <div class="mod-title">
+                <!--{{
+                    let anchor = document.createElement("a");
+                    anchor.href = `https://geode-sdk.org/mods/${params.mod.id}`;
+                    anchor.innerText = params.mod.name;
+                    return anchor;
+                }}-->
+            </div>
+
+            <div class="mod-id">
+                <!--{{ return document.createTextNode(params.mod.id) }}-->
+            </div>
+        </div>
+
+        <div class="developer">
+            <!-- {{
+                let parent = document.createElement("div");
+                parent.classList.add("overlay");
+
+                let anchor = document.createElement("a");
+                anchor.href = `https://geode-sdk.org/developers/${params.mod.developerID}`;
+                anchor.innerText = params.mod.developer;
+                parent.appendChild(anchor);
+
+                if (params.addTick) {
+                    if (params.mod.developerID != geodleData.mod.developerID) {
+                        parent.appendChild(Cross());
+                    } else {
+                        parent.appendChild(Tick());
+                    }
+                }
+
+                return parent;
+            }} -->
+        </div>
+
+        <!--{{
+            let parent = document.createElement("div");
+            parent.classList.add("row-compact");
+            parent.classList.add("tags");
+
+            for (let tag of params.mod.tags) {
+                let child = document.createElement("div");
+                child.classList.add("overlay");
+                child.classList.add("tag");
+
+                let label = document.createElement("span");
+                label.innerText = tag[0].toUpperCase() + tag.slice(1);
+                child.appendChild(label);
+
+                if (params.addTick) {
+                    if (!geodleData.mod.tags.includes(tag)) {
+                        child.appendChild(Cross());
+                    } else {
+                        child.appendChild(Tick());
+                    }
+                }
+
+                parent.appendChild(child);
+            }
+
+            return parent;
+        }}-->
+    </div>
+
+    <div class="download-wrapper row-compact">
+        <div class="download-icon"></div>
+        <!--{{ return document.createTextNode(params.mod.downloads) }}-->
+        <!--{{
+            if (geodleData.mod.downloads > params.mod.downloads) {
+                return document.createTextNode("&nbsp;&bull;&nbsp;(Higher!)");
+            } else if (geodleData.mod.downloads < params.mod.downloads) {
+                return document.createTextNode("&nbsp;&bull;&nbsp;(Lower!)");
+            }
+        }}-->
+    </div>
+
+    <div class="version-wrapper row-compact">
+        <div class="version-icon"></div>
+        <!--{{ return document.createTextNode(`v${params.mod.version}`) }}-->
+    </div>
+
+    <div class="release-wrapper row-compact">
+        <div class="release-icon"></div>
+        <!--{{
+            if (params.mod.updateDate == "????") {
+                return document.createTextNode(params.mod.updateDate)
+            }
+
+            let diff = ~~((Date.now() - new Date(params.mod.updateDate).getTime()) / 1000);
+
+            let relative;
+            if (diff < 60) {
+                relative = `${diff} seconds ago`;
+            } else if (diff < 3600) {
+                relative = `${~~(diff / 60)} minutes ago`;
+            } else if (diff < 86400) {
+                relative = `${~~(diff / 3600)} hours ago`;
+            } else if (diff < 2592000) {
+                relative = `${~~(diff / 86400)} days ago`;
+            } else if (diff < 31536000) {
+                relative = `${~~(diff / 2592000)} months ago`;
+            } else {
+                relative = `${~~(diff / 31536000)} years ago`;
+            }
+
+            return document.createTextNode(relative);
+        }}-->
+    </div>
 </div>

@@ -1,0 +1,85 @@
+<div id="game-over-box" class="col">
+    <!--{{
+        if (params.results) return;
+
+        params.results = `Geodle #${geodleData.day} on ${new Date(geodleData.date).toDateString()} `
+
+        let lastMod = params.guessHistory[params.guessHistory.length - 1];
+        if (lastMod.id == geodleData.mod.id) {
+            params.results += `${params.guessHistory.length}/7\n\n`;
+        } else {
+            params.results += "X/7\n\n";
+        }
+
+        for (let mod of params.guessHistory) {
+            params.results += mod.id == geodleData.mod.id ? "🟩" : "⬛";
+            params.results += mod.developerID == geodleData.mod.developerID ? "🟩" : "⬛";
+
+            let tagsIntersection = mod.tags.filter(value => geodleData.mod.tags.includes(value));
+            if (tagsIntersection.length == 0) params.results += "⬛";
+            else if (tagsIntersection.length == mod.tags.length) params.results += "🟩";
+            else params.results += "🟨";
+
+            params.results += "\n";
+        }
+    }}-->
+
+    <div id="content" class="col">
+        <div id="remark">
+            <!--{{
+                // dude can someone think of more this is so hard
+                let remarks = [
+                    undefined,
+                    [ "Ultimate Haxxor?", "No way!", "Legendary!", "Impossible!" ],
+                    [ "Magnificent.", "Amazing.", "Spectacular." ],
+                    [ "Impressive." ],
+                    [ "That was easy.", "Quick and simple." ],
+                    [ "Solid.", "Nice.", "Clean." ],
+                    [ "Splendid!" ],
+                    [ "Great!" ],
+                    [ "Phew!", "Barely!", "Close!" ],
+                    [ "Unlucky...", "Next time...", "Maybe tomorrow..." ],
+                ];
+
+                let possibilities = remarks[params.guessHistory.length];
+                return document.createTextNode(possibilities[~~(Math.random() * possibilities.length)]);
+            }}-->
+        </div>
+
+        <!--{{
+            return Guess({ mod: geodleData.mod, addTick: false });
+        }}-->
+
+        <pre>
+            <!--{{ param: results }}-->
+        </pre>
+
+        <!--{{
+            let copyButton = document.createElement("button");
+            copyButton.id = "copy-button";
+            copyButton.innerText = "Copy Results"
+            copyButton.addEventListener("click", () => {
+                navigator.clipboard.writeText(`${params.results}\n<https://geodle.undefined0.dev>`);
+                copyButton.innerText = "Copied!";
+
+                setTimeout(() => {
+                    copyButton.innerText = "Copy Results"
+                }, 1000);
+            });
+
+            return copyButton;
+        }}-->
+
+        <!--{{
+            let returnButton = document.createElement("button");
+            returnButton.id = "return-button";
+            returnButton.innerText = "Back to Puzzle"
+            returnButton.addEventListener("click", () => {
+                document.querySelector("#game-over-box").style.animation = "game-over-out 0.8s ease-out 0s 1 normal both";
+                document.querySelector("#game-over-box").style.pointerEvents = "none";
+            });
+
+            return returnButton;
+        }}-->
+    </div>
+</div>

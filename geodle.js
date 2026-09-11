@@ -2,15 +2,17 @@ import { Brain } from "brain";
 import { Result } from "result-js";
 import * as jsc from "bun:jsc";
 import * as unzipper from "unzipper";
+import cpp from "highlight.js/lib/languages/cpp";
+import hljs from "highlight.js/lib/core";
+
+hljs.registerLanguage("cpp", cpp);
 
 /**
  * @typedef GeodleData
  * @property {Temporal.PlainDate} date
  * @property {number} day
  * @property {GeodeMod} mod
- * @property {string} developerName
  * @property {string} code
- * @property {Array<string>} tags
  */
 
 /**
@@ -18,12 +20,17 @@ import * as unzipper from "unzipper";
  * @property {string} id
  * @property {string} name
  * @property {string} version
+ * @property {Array<string>} tags
+ * @property {string} developer
+ * @property {number} developerID
+ * @property {number} downloads
+ * @property {string} updateDate
  */
 
 export default class Geodle {
     /** @type {Brain} */ brain;
     /** @type {Temporal.PlainDate} */ zerothDay;
-    /** @type {GeodleData | string} */ data = "day has not been generated yet";
+    /** @type {Result<GeodleData>} */ data = Result.err("day has not been generated yet");
     /** @type {Array<GeodeMod>} */ mods = [];
 
     /**
@@ -31,7 +38,7 @@ export default class Geodle {
      */
     constructor(brain) {
         this.brain = brain;
-        this.zerothDay = Temporal.PlainDate.from(process.env.ZEROTH_DAY ?? "2000-00-00");
+        this.zerothDay = Temporal.PlainDate.from(process.env.ZEROTH_DAY ?? "2000-01-01");
     }
 
     async init() {
@@ -40,12 +47,12 @@ export default class Geodle {
         Bun.cron(
             "0 0 * * *",
             async () => {
-                this.data = (await this.generateToday()).merge();
+                this.data = await this.generateToday();
             },
             { tz: process.env.TIMEZONE },
         );
 
-        this.data = (await this.generateToday()).merge();
+        this.data = await this.generateToday();
     }
 
     /**
@@ -65,109 +72,138 @@ export default class Geodle {
         this.mods = allModsRes.unwrap();
         console.info(`we have ${this.mods.length} mods on the index`);
 
-        // then get the mod
+        // seed the rng with the current day
         let daysSinceStart = today.since(this.zerothDay).total("days");
         jsc.setRandomSeed(Number(Bun.hash(daysSinceStart.toString(16))));
+
+        console.info(`geodle #${daysSinceStart}`);
 
         let mod = undefined;
         let fileContents = undefined;
         let modData = undefined;
 
-        let validMod = false;
-        modLoop: while (!validMod) {
-            let modIndex = ~~(Math.random() * this.mods.length);
-            mod = this.mods[modIndex];
-            if (!mod) return Result.err("unreachable 1");
+        // first, find a developer then take their mods, so people like ery can't be chosen all the time
+        let validDeveloper = false;
+        developerLoop: while (!validDeveloper) {
+            let developers = this.mods.map(mod => mod.developerID);
+            developers = Array.from(new Set(developers).values());
 
-            console.info(`...which will be Geodle #${daysSinceStart}, which is mod index ${modIndex}, ${mod.id}`);
+            let developerIndex = ~~(Math.random() * developers.length);
+            let developer = developers[developerIndex];
+            if (!developer) return Result.err("unreachable");
 
-            // find if we can get the source code by doing shit to a zip file in memory
-            let modDataRes = await this.queryGeode(`/v1/mods/${mod.id}/versions/${mod.version}`);
-            if (modDataRes.isErr()) return modDataRes.forceErr();
-            modData = modDataRes.unwrap();
+            let mods = this.mods.filter(mod => mod.developerID == developer);
+            console.info(
+                `chosen developer index ${developerIndex}, developer #${developer}, they have ${mods.length} mods`,
+            );
 
-            let regex = /^(https?:\/\/[^\/]+)\/([^\/]+)\/([^\/]+)/;
-            let matches = regex.exec(modData["direct_download_link"]);
-            if (!matches) {
-                console.warn(`failed to match a valid download link for ${mod.id}, skipping...`);
-                continue;
-            }
-
-            let zipUrl = `${matches[1]}/${matches[2]}/${matches[3]}/archive/refs/heads/main.zip`;
-            console.info(`evaluated zip url to ${zipUrl}`);
-
-            let res = await fetch(zipUrl);
-            if (res.status != 200) {
-                console.warn(`failed to use the zip url, status code ${res.status}, skipping...`);
-                continue;
-            }
-
-            let zipRes = await Result.fromPromise(unzipper.Open.buffer(Buffer.from(await res.arrayBuffer())));
-            if (zipRes.isErr()) {
-                console.warn("invalid zip file, skipping...");
-                continue;
-            }
-
-            // find a good file, valid extension + not too short
-            let zip = zipRes.unwrap();
-            let validExtensions = [
-                ".c",
-                ".h",
-                ".cpp",
-                ".cc",
-                ".cxx",
-                ".c++",
-                ".hpp",
-                ".hh",
-                ".hxx",
-                ".h++",
-                ".m",
-                ".mm",
-            ];
-
-            let files = zip.files.filter(file => validExtensions.some(extension => file.path.endsWith(extension)));
-
-            while (!fileContents) {
-                if (files.length == 0) {
-                    console.warn(`zero valid files left in zip file (from ${zip.files.length})`);
-                    continue modLoop;
+            let validMod = false;
+            modLoop: while (!validMod) {
+                if (mods.length == 0) {
+                    console.warn("zero valid mods left by this developer");
+                    continue developerLoop;
                 }
 
-                let fileIndex = ~~(Math.random() * files.length);
-                let file = files[fileIndex];
-                if (!file) return Result.err("unreachable 2");
+                let modIndex = ~~(Math.random() * mods.length);
+                mod = mods[modIndex];
+                mods.splice(modIndex, 1);
 
-                console.info(`${files.length} valid files left, we chose file index ${fileIndex}, ${file.path}`);
+                if (!mod) return Result.err("unreachable");
 
-                let contents = (await file.buffer()).toString();
+                console.info(`chosen mod index ${modIndex}, ${mod.id}`);
 
-                let lines = contents.split("\n");
-                if (lines.length < 17) {
-                    console.warn(`file was too small (${lines.length} lines), picking a different one...`);
-                    files.splice(fileIndex, 1);
+                // find if we can get the source code by doing shit to a zip file in memory
+                let modDataRes = await this.queryGeode(`/v1/mods/${mod.id}/versions/${mod.version}`);
+                if (modDataRes.isErr()) return modDataRes.forceErr();
+                modData = modDataRes.unwrap();
+
+                let regex = /^(https?:\/\/[^\/]+)\/([^\/]+)\/([^\/]+)/;
+                let matches = regex.exec(modData["direct_download_link"]);
+                if (!matches) {
+                    console.warn(`failed to match a valid download link for ${mod.id}, skipping...`);
                     continue;
                 }
 
-                let start = ~~(Math.random() * (lines.length - 9));
-                let end = start + 17;
+                let zipUrl = `${matches[1]}/${matches[2]}/${matches[3]}/archive/refs/heads/main.zip`;
+                console.info(`evaluated zip url to ${zipUrl}`);
 
-                console.info(`choosing from line ${start} to ${end}`);
-                fileContents = lines.slice(start, end).join("\n");
+                let res = await fetch(zipUrl);
+                if (res.status != 200) {
+                    console.warn(`failed to use the zip url, status code ${res.status}, skipping...`);
+                    continue;
+                }
+
+                let zipRes = await Result.fromPromise(unzipper.Open.buffer(Buffer.from(await res.arrayBuffer())));
+                if (zipRes.isErr()) {
+                    console.warn("invalid zip file, skipping...");
+                    continue;
+                }
+
+                // find a good file, valid extension + not too short
+                let zip = zipRes.unwrap();
+                let validExtensions = [
+                    ".c",
+                    ".h",
+                    ".cpp",
+                    ".cc",
+                    ".cxx",
+                    ".c++",
+                    ".hpp",
+                    ".hh",
+                    ".hxx",
+                    ".h++",
+                    ".m",
+                    ".mm",
+                ];
+
+                let files = zip.files.filter(file => validExtensions.some(extension => file.path.endsWith(extension)));
+
+                while (!fileContents) {
+                    if (files.length == 0) {
+                        console.warn(`zero valid files left in zip file (from ${zip.files.length})`);
+                        continue modLoop;
+                    }
+
+                    let fileIndex = ~~(Math.random() * files.length);
+                    let file = files[fileIndex];
+                    files.splice(fileIndex, 1);
+
+                    if (!file) return Result.err("unreachable");
+
+                    console.info(`${files.length} valid files left, we chose file index ${fileIndex}, ${file.path}`);
+
+                    let contents = (await file.buffer()).toString();
+
+                    let lineCount = parseInt(process.env.LINE_COUNT ?? "20");
+
+                    let lines = contents.split("\n");
+                    if (lines.length < lineCount) {
+                        console.warn(`file was too small (${lines.length} lines), picking a different one...`);
+                        continue;
+                    }
+
+                    let start = ~~(Math.random() * (lines.length - lineCount - 1));
+                    let end = start + lineCount;
+
+                    console.info(`choosing from line ${start} to ${end}`);
+                    fileContents = lines.slice(start, end).join("\n");
+                }
+
+                validMod = true;
             }
 
-            validMod = true;
+            validDeveloper = true;
         }
 
         console.timeEnd("generating day");
 
-        // @ts-ignore
+        if (!mod || !today || !fileContents) return Result.err("unreachable");
+
         return Result.ok({
             date: today,
             day: daysSinceStart,
             mod: mod,
             code: fileContents,
-            developerName: modData["developers"][0]["display_name"],
-            tags: modData["tags"],
         });
     }
 
@@ -197,6 +233,11 @@ export default class Geodle {
                             id: mod["id"],
                             name: mod["versions"][0]["name"],
                             version: mod["versions"][0]["version"],
+                            tags: mod["tags"],
+                            developer: mod["developers"][0]["display_name"],
+                            developerID: mod["developers"][0]["id"],
+                            downloads: mod["download_count"],
+                            updateDate: mod["versions"][0]["updated_at"],
                         });
                     },
                 ),
@@ -210,25 +251,23 @@ export default class Geodle {
      * Called from the main page
      */
     generateDataHTML() {
-        if (typeof this.data === "string") {
+        if (this.data.isErr()) {
             return `
                 <script>
-                    const geodleError = ${JSON.stringify(this.data)};
+                    const geodleError = ${JSON.stringify(this.data.unwrapErr())};
                     const geodleData = {};
                 </script>
             `;
         } else {
+            let data = this.data.unwrap();
             return `
                 <script>
                     const geodleError = null;
                     const geodleData = {
-                        date: ${JSON.stringify(this.data.date.toString())},
-                        day: ${this.data.day},
-                        modID: ${JSON.stringify(this.data.mod.id)},
-                        modName: ${JSON.stringify(this.data.mod.name)},
-                        developerName: ${JSON.stringify(this.data.developerName)},
-                        code: ${JSON.stringify(this.data.code)},
-                        tags: ${JSON.stringify(this.data.tags)},
+                        date: ${JSON.stringify(data.date.toString())},
+                        day: ${data.day},
+                        mod: ${JSON.stringify(data.mod)},
+                        code: ${JSON.stringify(data.code)},
                         allMods: ${JSON.stringify(this.mods)},
                     }
                 </script>
@@ -236,10 +275,27 @@ export default class Geodle {
         }
     }
 
+    /**
+     * Called from the main page
+     */
+    generateHighlightedCode() {
+        if (this.data.isErr()) {
+            return this.data.unwrapErr();
+        }
+
+        return `
+            <pre><code>${
+                hljs.highlight(this.data.unwrap().code, {
+                    language: "cpp",
+                }).value
+            }</code></pre>
+        `.trim();
+    }
+
     getBrainParams() {
         return {
-            "Geodle.title": typeof this.data == "string" ? this.data : `Geodle #${this.data.day}`,
-            "Geodle.code": typeof this.data == "string" ? "" : this.data.code
+            "Geodle.title": this.data.isErr() ? "" : `Geodle #${this.data.unwrap().day}`,
+            "Geodle.code": this.data.isErr() ? "" : this.data.unwrap().code,
         };
     }
 
