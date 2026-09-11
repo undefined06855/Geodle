@@ -63,6 +63,7 @@ export default class Geodle {
         let allModsRes = await this.fetchAllMods();
         if (allModsRes.isErr()) return allModsRes.forceErr();
         this.mods = allModsRes.unwrap();
+        console.info(`we have ${this.mods.length} mods on the index`);
 
         // then get the mod
         let daysSinceStart = today.since(this.zerothDay).total("days");
@@ -238,6 +239,7 @@ export default class Geodle {
     getBrainParams() {
         return {
             "Geodle.title": typeof this.data == "string" ? this.data : `Geodle #${this.data.day}`,
+            "Geodle.code": typeof this.data == "string" ? "" : this.data.code
         };
     }
 

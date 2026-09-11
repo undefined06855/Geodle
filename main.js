@@ -9,6 +9,11 @@ await geodle.init();
 
 const server = Bun.serve({
     routes: {
+        "/fuse/:file": req => {
+            let file = Bun.file(`node_modules/fuse.js/dist/${req.params.file}`);
+            return new Response(file, { headers: { "Content-Type": file.type } });
+        },
+
         "/*": req => {
             return brain.generatePage(new URL(req.url).pathname, geodle.getBrainParams());
         },

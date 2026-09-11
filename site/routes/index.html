@@ -3,6 +3,17 @@
 
     <h1><!--{{ param: Geodle.title }}--></h1>
 
+    <div id="code-box">
+        <!-- {{ param: Geodle.code }} -->
+    </div>
+
     <div id="guessed-box"></div>
-    <input type="text" name="Guess" id="guess" placeholder="Enter a mod name..." />
+    <div id="guess-box">
+        <input type="text" name="Guess" id="guess" placeholder="Enter a mod name..." />
+        <div id="autofill"></div>
+    </div>
+
+    <!-- {{ dependency: Guess }}-->
+    <!-- {{ dependency: AutofillSuggestion }}-->
+    <script src="main.js" type="module"></script>
 </main>

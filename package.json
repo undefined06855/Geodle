@@ -12,6 +12,7 @@
     "dependencies": {
         "@types/unzipper": "^0.10.11",
         "brain": "undefined06855/brain",
+        "fuse.js": "^7.5.0",
         "result-js": "undefined06855/result-js",
         "unzipper": "^0.12.5"
     },
