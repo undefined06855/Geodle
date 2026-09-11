@@ -1,84 +1,90 @@
 .guess {
     position: relative;
     align-items: center;
+    flex-wrap: wrap;
     gap: 15px;
 
-    padding: 10px;
+    padding: 10px 20px;
 
     background: linear-gradient(0.9turn, #181724, #212031);
     border: 2px solid #2f2f3b;
     border-radius: 20px;
 
-    min-width: 100%;
-    min-height: 120px;
+    width: 100%;
+    min-height: 170px;
 
     img {
         height: 100px;
     }
 
-    .mod-title {
-        font-family: "Quicksand", sans-serif;
-        font-weight: 700;
-        font-size: 20px;
+    #guess-content {
+        gap: 4px;
 
-        a {
-            transition: color 0.2s;
-            &:not(:hover) {
-                color: inherit;
+        width: 50%;
+        & > * {
+            width: fit-content;
+        }
+
+        .mod-title {
+            font-family: "Quicksand", sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+
+            a {
+                transition: color 0.2s;
+                &:not(:hover) {
+                    color: inherit;
+                }
+            }
+        }
+
+        .mod-id {
+            font-family: "JetBrains Mono", sans-serif;
+            font-size: 10px;
+            align-self: center;
+        }
+
+        .tags {
+            flex-wrap: wrap;
+            max-width: 80%;
+
+            .tag {
+                border-radius: 5px;
+                border: 2px solid #3e3e47;
+                padding: 2px 8px;
             }
         }
     }
 
-    .mod-id {
-        font-family: "JetBrains Mono", sans-serif;
-        font-size: 10px;
-        align-self: center;
-    }
-
-    .tags {
-        flex-wrap: wrap;
-        max-width: 90%;
-
-        .tag {
-            border-radius: 5px;
-            border: 2px solid #3e3e47;
-            padding: 2px 8px;
+    .right {
+        .download-icon,
+        .version-icon,
+        .update-icon,
+        .release-icon {
+            background-color: #cd98bd;
+            width: 25px;
+            height: 25px;
         }
-    }
 
-    .download-icon,
-    .version-icon,
-    .release-icon {
-        background-color: #cd98bd;
-        width: 25px;
-        height: 25px;
-    }
-
-    .download-wrapper,
-    .version-wrapper,
-    .release-wrapper {
-        position: absolute;
-        right: 20px;
-    }
-
-    .download-wrapper {
-        top: 20px;
         .download-icon {
             mask: url("assets/download.svg") center center no-repeat;
         }
-    }
 
-    .version-wrapper {
-        top: 50px;
         .version-icon {
             mask: url("assets/version.svg") center center no-repeat;
         }
-    }
 
-    .release-wrapper {
-        top: 80px;
+        .update-icon {
+            mask: url("assets/clock-pencil.svg") center center no-repeat;
+        }
+
         .release-icon {
             mask: url("assets/clock.svg") center center no-repeat;
+        }
+
+        > * {
+            text-wrap: nowrap;
+            font-size: 16px;
         }
     }
 }
@@ -127,12 +133,12 @@
 
 #guess-box {
     max-width: 100%;
-    width: 400px;
+    width: 700px;
     min-height: 250px;
 
     input#guess {
         display: block;
-        width: 100%;
+        flex: 1 1 auto;
         padding: 5px;
 
         background-color: #1e1e29;
@@ -148,6 +154,24 @@
         &:focus-visible {
             border: 2px solid #7b7b96;
             outline: none;
+        }
+    }
+
+    button#submit-button {
+        width: 80px;
+
+        background-color: #1e1e29;
+        border: 2px solid #3b3b50;
+        box-shadow: 0px 0px 20px 0px #00000041;
+        border-radius: 10px;
+
+        color: inherit;
+        font-family: inherit;
+        font-size: inherit;
+
+        cursor: pointer;
+        &:disabled {
+            cursor: inherit;
         }
     }
 }

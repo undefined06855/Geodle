@@ -28,7 +28,7 @@
         return parent;
     }}-->
 
-    <div class="col-compact" style="height: 100%; gap: 4px">
+    <div class="col-compact" id="guess-content">
         <div class="row-compact">
             <div class="mod-title">
                 <!--{{
@@ -101,59 +101,52 @@
         }}-->
     </div>
 
-    <div class="download-wrapper row-compact">
-        <div class="download-icon"></div>
-        <!--{{ return document.createTextNode(params.mod.downloads) }}-->
-        <!--{{
-            if (geodleData.mod.downloads > params.mod.downloads) {
-                return document.createTextNode("&nbsp;&bull;&nbsp;(Higher)");
-            } else if (geodleData.mod.downloads < params.mod.downloads) {
-                return document.createTextNode("&nbsp;&bull;&nbsp;(Lower)");
-            }
-        }}-->
-    </div>
+    <div class="col-compact right">
+        <div class="row-compact">
+            <div class="download-icon"></div>
+            <!--{{ return abbreviateDownloadCount(params.mod.downloads); }}-->
+            <!--{{
+                if (geodleData.mod.downloads > params.mod.downloads) {
+                    return document.createTextNode("&nbsp;&bull;&nbsp;(Higher)");
+                } else if (geodleData.mod.downloads < params.mod.downloads) {
+                    return document.createTextNode("&nbsp;&bull;&nbsp;(Lower)");
+                }
+            }}-->
+        </div>
 
-    <div class="version-wrapper row-compact">
-        <div class="version-icon"></div>
-        <!--{{ return document.createTextNode(`v${params.mod.version}`) }}-->
-    </div>
+        <div class="row-compact">
+            <div class="version-icon"></div>
+            <!--{{ return document.createTextNode(`v${params.mod.version}`) }}-->
+        </div>
 
-    <div class="release-wrapper row-compact">
-        <div class="release-icon"></div>
-        <!--{{
-            if (params.mod.updateDate == "????") {
-                return document.createTextNode(params.mod.updateDate)
-            }
+        <div class="row-compact">
+            <div class="release-icon"></div>
+            <!--{{
+                return calculateRelativeDate(params.mod.releaseDate);
+            }}-->
+            <!--{{
+                let offset = new Date(params.mod.releaseDate).getTime() - new Date(geodleData.mod.releaseDate).getTime();
+                if (offset < 0) {
+                    return document.createTextNode("&nbsp;&bull;&nbsp;(Newer)");
+                } else if (offset > 0) {
+                    return document.createTextNode("&nbsp;&bull;&nbsp;(Older)");
+                }
+            }}-->
+        </div>
 
-            let diff = ~~((Date.now() - new Date(params.mod.updateDate).getTime()) / 1000);
-
-            let relative;
-            if (diff < 60) {
-                relative = `${diff} seconds ago`;
-            } else if (diff < 3600) {
-                relative = `${~~(diff / 60)} minutes ago`;
-            } else if (diff < 86400) {
-                relative = `${~~(diff / 3600)} hours ago`;
-            } else if (diff < 2592000) {
-                relative = `${~~(diff / 86400)} days ago`;
-            } else if (diff < 31536000) {
-                relative = `${~~(diff / 2592000)} months ago`;
-            } else {
-                relative = `${~~(diff / 31536000)} years ago`;
-            }
-
-            // lol
-            if (parseInt(relative) == 1) relative = relative.replace("s", "");
-
-            return document.createTextNode(relative);
-        }}-->
-        <!--{{
-            let offset = new Date(params.mod.updateDate).getTime() - new Date(geodleData.mod.updateDate).getTime();
-            if (offset < 0) {
-                return document.createTextNode("&nbsp;&bull;&nbsp;(Newer)");
-            } else if (offset > 0) {
-                return document.createTextNode("&nbsp;&bull;&nbsp;(Older)");
-            }
-        }}-->
+        <div class="row-compact">
+            <div class="update-icon"></div>
+            <!--{{
+                return calculateRelativeDate(params.mod.updateDate);
+            }}-->
+            <!--{{
+                let offset = new Date(params.mod.updateDate).getTime() - new Date(geodleData.mod.updateDate).getTime();
+                if (offset < 0) {
+                    return document.createTextNode("&nbsp;&bull;&nbsp;(Newer)");
+                } else if (offset > 0) {
+                    return document.createTextNode("&nbsp;&bull;&nbsp;(Older)");
+                }
+            }}-->
+        </div>
     </div>
 </div>

@@ -3,6 +3,7 @@ import { FuseWorker } from "./fuse/fuse-worker.mjs";
 
 /** @type {HTMLInputElement} */
 let input = document.querySelector("input#guess");
+let submitButton = document.querySelector("#submit-button");
 let suggestions = document.querySelector("div#autofill");
 let guesses = document.querySelector("div#guessed-box");
 
@@ -29,6 +30,7 @@ function updateHint() {
         tags: ["????"],
         version: "????",
         updateDate: "????",
+        releaseDate: "????"
     };
 
     // guess 3, metadata (this isn't really helpful in most cases)
@@ -36,6 +38,7 @@ function updateHint() {
         hintState.tags = geodleData.mod.tags;
         hintState.version = geodleData.mod.version;
         hintState.updateDate = geodleData.mod.updateDate;
+        hintState.releaseDate = geodleData.mod.releaseDate;
         hintState.downloads = geodleData.mod.downloads;
     }
 
@@ -71,6 +74,7 @@ function checkGameOver() {
     let mod = guessHistory[guessHistory.length - 1];
     if (mod.id == geodleData.mod.id || guessHistory.length == 7) {
         input.disabled = "yeah";
+        submitButton.disabled = "yep";
         document.querySelector("main").appendChild(GameOverBox({ guessHistory }));
     }
 }
@@ -120,6 +124,7 @@ function checkGameOver() {
 
     input.addEventListener("keydown", async event => {
         if (event.code != "Enter") return;
+        if (input.value.trim() == "") return;
 
         let results = await fuse.search(input.value);
         if (results.length == 0) return;
@@ -135,6 +140,12 @@ function checkGameOver() {
 
         suggestions.innerHTML = "";
         input.value = "";
+    });
+
+    submitButton.addEventListener("click", () => {
+        input.dispatchEvent(new KeyboardEvent("keydown", {
+            code: "Enter"
+        }));
     });
 
     input.focus();

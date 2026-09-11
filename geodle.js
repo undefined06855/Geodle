@@ -25,6 +25,7 @@ hljs.registerLanguage("cpp", cpp);
  * @property {number} developerID
  * @property {number} downloads
  * @property {string} updateDate
+ * @property {string} releaseDate
  */
 
 export default class Geodle {
@@ -238,6 +239,7 @@ export default class Geodle {
                             developerID: mod["developers"][0]["id"],
                             downloads: mod["download_count"],
                             updateDate: mod["versions"][0]["updated_at"],
+                            releaseDate: mod["created_at"],
                         });
                     },
                 ),
