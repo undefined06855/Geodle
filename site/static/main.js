@@ -9,12 +9,12 @@ let guesses = document.querySelector("div#guessed-box");
 /** @type {Array<import("../../geodle").GeodeMod>} */
 let guessHistory = [];
 
-if (localStorage.getItem("date") == geodleData.date) {
+if (localStorage.getItem("date") == geodleData.day) {
     guessHistory = JSON.parse(localStorage.getItem("guessHistory") ?? "[]").map(id =>
         geodleData.allMods.find(mod => mod.id == id),
     );
 } else {
-    localStorage.setItem("date", geodleData.date);
+    localStorage.setItem("date", geodleData.day);
     localStorage.setItem("guessHistory", "[]");
 }
 
