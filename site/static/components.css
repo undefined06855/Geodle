@@ -136,42 +136,48 @@
     width: 700px;
     min-height: 250px;
 
-    input#guess {
-        display: block;
-        flex: 1 1 auto;
-        padding: 5px;
+    #guess-box-contents {
+        max-width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
 
-        background-color: #1e1e29;
-        border: 2px solid #3b3b50;
-        box-shadow: 0px 0px 20px 0px #00000041;
-        border-radius: 10px;
+        input#guess {
+            display: block;
+            flex: 1 1 auto;
+            padding: 5px;
 
-        font-family: "Quicksand", sans-serif;
-        font-size: 35px;
-        text-align: center;
-        color: inherit;
+            background-color: #1e1e29;
+            border: 2px solid #3b3b50;
+            box-shadow: 0px 0px 20px 0px #00000041;
+            border-radius: 10px;
 
-        &:focus-visible {
-            border: 2px solid #7b7b96;
-            outline: none;
+            font-family: "Quicksand", sans-serif;
+            font-size: 35px;
+            text-align: center;
+            color: inherit;
+
+            &:focus-visible {
+                border: 2px solid #7b7b96;
+                outline: none;
+            }
         }
-    }
 
-    button#submit-button {
-        width: 80px;
+        button#submit-button {
+            width: 80px;
 
-        background-color: #1e1e29;
-        border: 2px solid #3b3b50;
-        box-shadow: 0px 0px 20px 0px #00000041;
-        border-radius: 10px;
+            background-color: #1e1e29;
+            border: 2px solid #3b3b50;
+            box-shadow: 0px 0px 20px 0px #00000041;
+            border-radius: 10px;
 
-        color: inherit;
-        font-family: inherit;
-        font-size: inherit;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
 
-        cursor: pointer;
-        &:disabled {
-            cursor: inherit;
+            cursor: pointer;
+            &:disabled {
+                cursor: inherit;
+            }
         }
     }
 }
