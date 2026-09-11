@@ -23,6 +23,14 @@
             else if (tagsIntersection.length == mod.tags.length) params.results += "🟩";
             else params.results += "🟨";
 
+            if (mod.downloads < geodleData.mod.downloads) {
+                params.results += "⬆️";
+            } else if (mod.downloads > geodleData.mod.downloads) {
+                params.results += "⬇️";
+            } else {
+                params.results += "✅"
+            }
+
             let offset = new Date(mod.releaseDate).getTime() - new Date(geodleData.mod.releaseDate).getTime();
             if (offset < 0) {
                 params.results += "⬆️";
