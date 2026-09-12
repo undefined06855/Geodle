@@ -79,11 +79,6 @@ export default class Geodle {
 
         console.info(`geodle #${daysSinceStart}`);
 
-        if (today.toString() == "2026-09-12") {
-            // @ts-ignore
-            return Result.ok(this.mods.find(mod => mod.id == "erymanthus.dinnerbone"))
-        }
-
         let mod = undefined;
         let fileContents = undefined;
         let modData = undefined;
@@ -114,6 +109,10 @@ export default class Geodle {
                 let modIndex = ~~(Math.random() * mods.length);
                 mod = mods[modIndex];
                 mods.splice(modIndex, 1);
+
+                if (today.toString() == "2026-09-12") {
+                    mod = this.mods.find(mod => mod.id == "erymanthus.dinnerbone");
+                }
 
                 if (!mod) return Result.err("unreachable");
 
