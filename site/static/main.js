@@ -13,14 +13,13 @@ let guessHistory = [];
 if (localStorage.getItem("date") == geodleData.day) {
     guessHistory = JSON.parse(localStorage.getItem("guessHistory") ?? "[]").map(id =>
         geodleData.allMods.find(mod => mod.id == id),
-    );
+    ).filter(mod => mod);
 } else {
     localStorage.setItem("date", geodleData.day);
     localStorage.setItem("guessHistory", "[]");
 }
 
 for (let mod of guessHistory) {
-    if (!mod) continue;
     guesses.appendChild(Guess({ mod }));
 }
 
