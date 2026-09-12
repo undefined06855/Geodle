@@ -79,6 +79,11 @@ export default class Geodle {
 
         console.info(`geodle #${daysSinceStart}`);
 
+        if (today.toString() == "2026-09-12") {
+            // @ts-ignore
+            return Result.ok(this.mods.find(mod => mod.id == "erymanthus.dinnerbone"))
+        }
+
         let mod = undefined;
         let fileContents = undefined;
         let modData = undefined;
@@ -88,6 +93,7 @@ export default class Geodle {
         developerLoop: while (!validDeveloper) {
             let developers = this.mods.map(mod => mod.developerID);
             developers = Array.from(new Set(developers).values());
+            developers.sort((a, b) => a - b);
 
             let developerIndex = ~~(Math.random() * developers.length);
             let developer = developers[developerIndex];
