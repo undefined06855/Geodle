@@ -79,81 +79,79 @@ function checkGameOver() {
     }
 }
 
-(async () => {
-    // don't do anything if the server had an exception
-    if (geodleError) {
-        console.error(geodleError);
+// don't do anything if the server had an exception
+if (geodleError) {
+    console.error(geodleError);
+    return;
+}
+
+const fuse = new FuseWorker(
+    geodleData.allMods,
+    {
+        keys: ["id", "name", "developer"],
+    },
+    {
+        workerUrl: "./fuse/fuse.worker.mjs",
+    },
+);
+
+input.addEventListener("input", async event => {
+    if (input.value.trim() == "") {
+        suggestions.innerHTML = "";
         return;
     }
 
-    const fuse = new FuseWorker(
-        geodleData.allMods,
-        {
-            keys: ["id", "name", "developer"],
-        },
-        {
-            workerUrl: "./fuse/fuse.worker.mjs",
-        },
-    );
+    let results = await fuse.search(input.value);
+    suggestions.innerHTML = "";
 
-    input.addEventListener("input", async event => {
-        if (input.value.trim() == "") {
-            suggestions.innerHTML = "";
-            return;
-        }
+    for (let result of results.slice(0, 5)) {
+        let mod = result.item;
+        let suggestion = AutofillSuggestion({
+            modID: mod.id,
+            modName: mod.name,
+        });
 
-        let results = await fuse.search(input.value);
-        suggestions.innerHTML = "";
+        suggestion.addEventListener("click", () => {
+            input.value = mod.name;
+            input.dispatchEvent(new InputEvent("input"));
+            input.focus();
+        });
 
-        for (let result of results.slice(0, 5)) {
-            let mod = result.item;
-            let suggestion = AutofillSuggestion({
-                modID: mod.id,
-                modName: mod.name,
-            });
-
-            suggestion.addEventListener("click", () => {
-                input.value = mod.name;
-                input.dispatchEvent(new InputEvent("input"));
-                input.focus();
-            });
-
-            suggestions.appendChild(suggestion);
-        }
-    });
-
-    input.addEventListener("keydown", async event => {
-        if (event.code != "Enter") return;
-        if (input.value.trim() == "") return;
-
-        let results = await fuse.search(input.value);
-        if (results.length == 0) return;
-
-        let mod = results[0].item;
-
-        guesses.appendChild(Guess({ mod }));
-        guessHistory.push(mod);
-        localStorage.setItem("guessHistory", JSON.stringify(guessHistory.map(guess => guess.id)));
-
-        checkGameOver();
-        updateHint();
-
-        suggestions.innerHTML = "";
-        input.value = "";
-    });
-
-    submitButton.addEventListener("click", () => {
-        input.dispatchEvent(new KeyboardEvent("keydown", {
-            code: "Enter"
-        }));
-    });
-
-    input.focus();
-
-    for (let mod of guessHistory) {
-        guesses.appendChild(Guess({ mod }));
+        suggestions.appendChild(suggestion);
     }
+});
+
+input.addEventListener("keydown", async event => {
+    if (event.code != "Enter") return;
+    if (input.value.trim() == "") return;
+
+    let results = await fuse.search(input.value);
+    if (results.length == 0) return;
+
+    let mod = results[0].item;
+
+    guesses.appendChild(Guess({ mod }));
+    guessHistory.push(mod);
+    localStorage.setItem("guessHistory", JSON.stringify(guessHistory.map(guess => guess.id)));
 
     checkGameOver();
     updateHint();
-})();
+
+    suggestions.innerHTML = "";
+    input.value = "";
+});
+
+submitButton.addEventListener("click", () => {
+    input.dispatchEvent(new KeyboardEvent("keydown", {
+        code: "Enter"
+    }));
+});
+
+input.focus();
+
+for (let mod of guessHistory) {
+    guesses.appendChild(Guess({ mod }));
+}
+
+checkGameOver();
+updateHint();
