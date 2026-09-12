@@ -19,6 +19,11 @@ if (localStorage.getItem("date") == geodleData.day) {
     localStorage.setItem("guessHistory", "[]");
 }
 
+for (let mod of guessHistory) {
+    if (!mod) continue;
+    guesses.appendChild(Guess({ mod }));
+}
+
 function updateHint() {
     /** @type {import("../../geodle").GeodeMod} */
     let hintState = {
@@ -147,10 +152,6 @@ submitButton.addEventListener("click", () => {
 });
 
 input.focus();
-
-for (let mod of guessHistory) {
-    guesses.appendChild(Guess({ mod }));
-}
 
 checkGameOver();
 updateHint();
