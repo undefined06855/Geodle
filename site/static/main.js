@@ -81,8 +81,7 @@ function checkGameOver() {
 
 // don't do anything if the server had an exception
 if (geodleError) {
-    console.error(geodleError);
-    return;
+    throw new Error(geodleError);
 }
 
 const fuse = new FuseWorker(
