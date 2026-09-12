@@ -61,7 +61,7 @@
                 parent.appendChild(anchor);
 
                 if (params.addTick) {
-                    if (params.mod.developerID != geodleData.mod.developerID) {
+                    if (params.mod.developer.toLowerCase() != geodleData.mod.developer.toLowerCase()) {
                         parent.appendChild(Cross());
                     } else {
                         parent.appendChild(Tick());
