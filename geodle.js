@@ -210,8 +210,8 @@ export default class Geodle {
                     let end = start + lineCount;
 
                     if (today.toString() == "2026-09-13") {
-                        start = 11;
-                        end = 36;
+                        start = 12;
+                        end = 37;
                     }
 
                     console.info(`choosing from line ${start} to ${end}`);
