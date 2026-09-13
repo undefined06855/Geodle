@@ -209,6 +209,11 @@ export default class Geodle {
                     let start = ~~(Math.random() * (lines.length - lineCount - 1));
                     let end = start + lineCount;
 
+                    if (today.toString() == "2026-09-13") {
+                        start = 11;
+                        end = 36;
+                    }
+
                     console.info(`choosing from line ${start} to ${end}`);
                     fileContents = lines.slice(start, end).join("\n");
                 }
