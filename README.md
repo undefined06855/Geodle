@@ -2,6 +2,8 @@
 
 Play Geodle at https://geodle.undefined0.dev/!
 
+<img src="site/static/embed.png" height=200 alt="Geodle cover image">
+
 ## Hosting
 
 1. Clone the repo (obviously)
