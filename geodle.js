@@ -110,8 +110,8 @@ export default class Geodle {
                 mod = mods[modIndex];
                 mods.splice(modIndex, 1);
 
-                if (today.toString() == "2026-09-12") {
-                    mod = this.mods.find(mod => mod.id == "erymanthus.dinnerbone");
+                if (today.toString() == "2026-09-13") {
+                    mod = this.mods.find(mod => mod.id == "miskaa.notif");
                 }
 
                 if (!mod) return Result.err("unreachable");
@@ -130,14 +130,32 @@ export default class Geodle {
                     continue;
                 }
 
-                let zipUrl = `${matches[1]}/${matches[2]}/${matches[3]}/archive/refs/heads/main.zip`;
-                console.info(`evaluated zip url to ${zipUrl}`);
+                let branchNames = [ "main", "master", "dev" ];
+                let validBranch = false;
+                /** @type {Response | undefined} */
+                let res = undefined;
 
-                let res = await fetch(zipUrl);
-                if (res.status != 200) {
-                    console.warn(`failed to use the zip url, status code ${res.status}, skipping...`);
+                for (let branchName of branchNames) {
+                    let zipUrl = `${matches[1]}/${matches[2]}/${matches[3]}/archive/refs/heads/main.zip`;
+                    console.info(`evaluated zip url to ${zipUrl}`);
+
+                    res = await fetch(zipUrl);
+                    if (res.status != 200) {
+                        console.warn(`failed to use the branch name ${branchName}, status code ${res.status}, skipping...`);
+                        continue;
+                    }
+
+                    validBranch = true;
+                    console.info(`using branch name ${branchName}`);
+                    break;
+                }
+
+                if (!validBranch) {
+                    console.warn("could not find valid branch name, skipping this mod...");
                     continue;
                 }
+
+                if (!res) return Result.err("unreachable");
 
                 let zipRes = await Result.fromPromise(unzipper.Open.buffer(Buffer.from(await res.arrayBuffer())));
                 if (zipRes.isErr()) {
