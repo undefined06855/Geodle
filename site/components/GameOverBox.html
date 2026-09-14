@@ -1,4 +1,4 @@
-<GameOverBox id="game-over-box" class="col">
+<GameOverBox class="col">
     <!--{{
         if (params.results) return;
 
@@ -107,8 +107,8 @@
             returnButton.id = "return-button";
             returnButton.innerText = "Back to Puzzle"
             returnButton.addEventListener("click", () => {
-                document.querySelector("#game-over-box").style.animation = "game-over-out 0.8s ease-out 0s 1 normal both";
-                document.querySelector("#game-over-box").style.pointerEvents = "none";
+                document.querySelector("GameOverBox").style.animation = "game-over-out 0.8s ease-out 0s 1 normal both";
+                document.querySelector("GameOverBox").style.pointerEvents = "none";
             });
 
             return returnButton;
@@ -140,7 +140,7 @@
             }
         }
 
-        #game-over-box {
+        GameOverBox {
             justify-content: safe center;
             align-items: center;
 
