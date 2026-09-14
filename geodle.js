@@ -110,10 +110,6 @@ export default class Geodle {
                 mod = mods[modIndex];
                 mods.splice(modIndex, 1);
 
-                if (today.toString() == "2026-09-13") {
-                    mod = this.mods.find(mod => mod.id == "miskaa.notif");
-                }
-
                 if (!mod) return Result.err("unreachable");
 
                 console.info(`chosen mod index ${modIndex}, ${mod.id}`);
@@ -208,11 +204,6 @@ export default class Geodle {
 
                     let start = ~~(Math.random() * (lines.length - lineCount - 1));
                     let end = start + lineCount;
-
-                    if (today.toString() == "2026-09-13") {
-                        start = 12;
-                        end = 37;
-                    }
 
                     console.info(`choosing from line ${start} to ${end}`);
                     fileContents = lines.slice(start, end).join("\n");
