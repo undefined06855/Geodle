@@ -6,7 +6,7 @@
       "name": "geodle",
       "dependencies": {
         "@types/unzipper": "^0.10.11",
-        "brain": "undefined06855/brain",
+        "brain": "https://github.com/undefined06855/brain",
         "fuse.js": "^7.5.0",
         "highlight.js": "^11.12.0",
         "result-js": "undefined06855/result-js",
@@ -73,7 +73,7 @@
 
     "bluebird": ["bluebird@3.7.2", "", {}, "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg=="],
 
-    "brain": ["brain@github:undefined06855/brain#f6b6202", { "dependencies": { "happy-dom": "^20.11.6", "result-js": "https://github.com/undefined06855/result-js" }, "peerDependencies": { "typescript": "^5" } }, "undefined06855-Brain-f6b6202", "sha512-w9VNyjMxh6vh2KlasQ+y3+KEZKWXTxaMWplHEafy4a+ZfxfwCNyTUzh6NjVnl2daKmSPaA5BXXTf1Ggz8n9ADw=="],
+    "brain": ["brain@github:undefined06855/brain#f97c676", { "dependencies": { "happy-dom": "^20.11.6", "result-js": "https://github.com/undefined06855/result-js" }, "peerDependencies": { "typescript": "^5" } }, "undefined06855-Brain-f97c676", "sha512-fqKqRGpR9l+OzGiyzDzCCsgr1vT+xizAbAf8k+LX5HAVR7gHt2ZNd8U1n1PEKQxDGPtqfyldw7OveovH4y+EOA=="],
 
     "buffer-image-size": ["buffer-image-size@0.6.4", "", { "dependencies": { "@types/node": "*" } }, "sha512-nEh+kZOPY1w+gcCMobZ6ETUp9WfibndnosbpwB1iJk/8Gt5ZF2bhS6+B6bPYz424KtwsR6Rflc3tCz1/ghX2dQ=="],
 
@@ -91,7 +91,7 @@
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
-    "happy-dom": ["happy-dom@20.14.3", "", { "dependencies": { "@types/node": ">=20.0.0", "@types/whatwg-mimetype": "^3.0.2", "@types/ws": "^8.18.1", "buffer-image-size": "^0.6.4", "entities": "^7.0.1", "whatwg-mimetype": "^3.0.0", "ws": "^8.21.0" } }, "sha512-0KMb/Eh8rsd+aMNkOk5h8LkAjo9Na1aksnEGmsuZf+GXl6UkAdIi0VbUHU7d59lXhNmawODgwwuCMiZpCxwwCw=="],
+    "happy-dom": ["happy-dom@20.14.5", "", { "dependencies": { "@types/node": ">=20.0.0", "@types/whatwg-mimetype": "^3.0.2", "@types/ws": "^8.18.1", "buffer-image-size": "^0.6.4", "entities": "^7.0.1", "whatwg-mimetype": "^3.0.0", "ws": "^8.21.0" } }, "sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ=="],
 
     "highlight.js": ["highlight.js@11.12.0", "", {}, "sha512-nbfWpyRMcMrPMmDwJB+dhX/eiaPKtc2RB+0QZskqJ3WjRA/FDS0e9hZrx8EC/lbEv8gXy98FcDbNa/dspAaJMg=="],
 

@@ -64,11 +64,16 @@
                     [ "Impressive.", "Epic.", "Looks like installing those mods paid off after all." ],
                     [ "Splendid!", "Feature-worthy." ],
                     [ "That was easy.", "Quick and simple.", "Nice.", "Could be worse." ],
+                    [ "TODO: " ]
                     [ "Phew!", "Barely!", "Close!", "You are fuk map", "OK." ],
                     [ "Unlucky...", "Next time...", "Maybe tomorrow...", "It wasn't Soggy Mod...", "MegaHack IMO." ],
                 ];
 
-                let possibilities = remarks[params.guessHistory.length];
+                let guesses = params.guessHistory.length;
+                let last = params.guessHistory[params.guessHistory.length - 1];
+                if (last.id != geodleData.mod.id) guesses += 1;
+
+                let possibilities = remarks[guesses];
                 return document.createTextNode(possibilities[~~(Math.random() * possibilities.length)]);
             }}-->
         </div>

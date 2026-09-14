@@ -11,7 +11,7 @@
     },
     "dependencies": {
         "@types/unzipper": "^0.10.11",
-        "brain": "undefined06855/brain",
+        "brain": "https://github.com/undefined06855/brain",
         "fuse.js": "^7.5.0",
         "highlight.js": "^11.12.0",
         "result-js": "undefined06855/result-js",
