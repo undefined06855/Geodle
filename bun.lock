@@ -73,7 +73,7 @@
 
     "bluebird": ["bluebird@3.7.2", "", {}, "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg=="],
 
-    "brain": ["brain@github:undefined06855/brain#f97c676", { "dependencies": { "happy-dom": "^20.11.6", "result-js": "https://github.com/undefined06855/result-js" }, "peerDependencies": { "typescript": "^5" } }, "undefined06855-Brain-f97c676", "sha512-fqKqRGpR9l+OzGiyzDzCCsgr1vT+xizAbAf8k+LX5HAVR7gHt2ZNd8U1n1PEKQxDGPtqfyldw7OveovH4y+EOA=="],
+    "brain": ["brain@github:undefined06855/brain#5cc514a", { "dependencies": { "happy-dom": "^20.11.6", "html-entities": "^2.6.0", "result-js": "https://github.com/undefined06855/result-js" }, "peerDependencies": { "typescript": "^5" } }, "undefined06855-Brain-5cc514a", "sha512-61RcdTBamN9qJt6CChgdb1K26kffrPZhbc7lOhvOe71lyBbPiSYyUgbvron0oGv3t7TuA0D+Jj32b4RJlLbt1w=="],
 
     "buffer-image-size": ["buffer-image-size@0.6.4", "", { "dependencies": { "@types/node": "*" } }, "sha512-nEh+kZOPY1w+gcCMobZ6ETUp9WfibndnosbpwB1iJk/8Gt5ZF2bhS6+B6bPYz424KtwsR6Rflc3tCz1/ghX2dQ=="],
 
@@ -94,6 +94,8 @@
     "happy-dom": ["happy-dom@20.14.5", "", { "dependencies": { "@types/node": ">=20.0.0", "@types/whatwg-mimetype": "^3.0.2", "@types/ws": "^8.18.1", "buffer-image-size": "^0.6.4", "entities": "^7.0.1", "whatwg-mimetype": "^3.0.0", "ws": "^8.21.0" } }, "sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ=="],
 
     "highlight.js": ["highlight.js@11.12.0", "", {}, "sha512-nbfWpyRMcMrPMmDwJB+dhX/eiaPKtc2RB+0QZskqJ3WjRA/FDS0e9hZrx8EC/lbEv8gXy98FcDbNa/dspAaJMg=="],
+
+    "html-entities": ["html-entities@2.6.0", "", {}, "sha512-kig+rMn/QOVRvr7c86gQ8lWXq+Hkv6CbAH1hLu+RG338StTpE8Z0b44SDVaqVu7HGKf27frdmUYEs9hTUX/cLQ=="],
 
     "inherits": ["inherits@2.0.4", "", {}, "sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ=="],
 
