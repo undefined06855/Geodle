@@ -1,3 +1,29 @@
-<div id="info-box">
+<InfoBox id="info-box">
     <div id="info-title">Hint</div>
-</div>
+
+    <style>
+        InfoBox {
+            position: relative;
+
+            border-radius: 40px;
+            background-color: #1e1e29;
+            border: 2px solid #3b3b50;
+            box-shadow: 0px 0px 20px 0px #00000041;
+
+            max-width: 100%;
+            width: 700px;
+
+            padding: 20px;
+            padding-top: 40px;
+
+            > #info-title {
+                position: absolute;
+                left: 50%;
+                top: 5px;
+                translate: -50% 0;
+
+                font-size: 20px;
+            }
+        }
+    </style>
+</InfoBox>

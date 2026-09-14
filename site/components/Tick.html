@@ -1,1 +1,36 @@
-<div class="tick"></div>
+<Tick>
+    <style>
+        *:has(Tick, Cross) {
+            position: relative;
+        }
+
+        Tick,
+        Cross {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            translate: -50% -50%;
+
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+            width: 40px;
+            height: 40px;
+
+            z-index: 1;
+
+            transition: opacity 0.2s;
+            &:hover {
+                opacity: 0.2;
+            }
+        }
+    </style>
+
+    <style>
+        Tick {
+            background-image: url("assets/tick.png");
+            animation: tick-in 0.8s cubic-bezier(0.27, 3, 0.82, 1) 0s 1 normal none;
+        }
+    </style>
+</Tick>

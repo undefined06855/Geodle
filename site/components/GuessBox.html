@@ -1,7 +1,65 @@
-<div id="guess-box">
+<GuessBox id="guess-box">
     <div class="row-compact" id="guess-box-contents">
         <input type="text" name="Guess" id="guess" placeholder="Enter a mod name..." />
         <button id="submit-button">Guess</button>
     </div>
     <div id="autofill" class="col-compact"></div>
-</div>
+
+    <style>
+        GuessBox {
+            max-width: 100%;
+            width: 700px;
+            min-height: 250px;
+
+            #guess-box-contents {
+                max-width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+
+                input#guess {
+                    display: block;
+                    flex: 1 1 auto;
+                    padding: 5px;
+
+                    background-color: #1e1e29;
+                    border: 2px solid #3b3b50;
+                    box-shadow: 0px 0px 20px 0px #00000041;
+                    border-radius: 10px;
+
+                    font-family: "Quicksand", sans-serif;
+                    font-size: 35px;
+                    text-align: center;
+                    color: inherit;
+
+                    &:focus-visible {
+                        border: 2px solid #7b7b96;
+                        outline: none;
+                    }
+                }
+
+                button#submit-button {
+                    width: 80px;
+
+                    background-color: #1e1e29;
+                    border: 2px solid #3b3b50;
+                    box-shadow: 0px 0px 20px 0px #00000041;
+                    border-radius: 10px;
+
+                    color: inherit;
+                    font-family: inherit;
+                    font-size: inherit;
+
+                    cursor: pointer;
+                    &:disabled {
+                        cursor: inherit;
+                    }
+                }
+            }
+
+            #autofill {
+                gap: 6px;
+                padding-top: 10px;
+            }
+        }
+    </style>
+</GuessBox>

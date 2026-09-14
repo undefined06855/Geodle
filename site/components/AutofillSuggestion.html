@@ -1,4 +1,4 @@
-<div class="suggestion">
+<AutofillSuggestion class="suggestion">
     <!--{{
         let icon = new Image();
         icon.src = `https://api.geode-sdk.org/v1/mods/${params.modID}/logo`;
@@ -6,4 +6,23 @@
     }}-->
 
     <!--{{ param: modName }}-->
-</div>
+
+    <style>
+        AutofillSuggestion {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+
+            height: 30px;
+
+            justify-content: center;
+            align-items: center;
+
+            cursor: pointer;
+
+            img {
+                height: 100%;
+            }
+        }
+    </style>
+</AutofillSuggestion>

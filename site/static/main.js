@@ -5,7 +5,7 @@ import { FuseWorker } from "./fuse/fuse-worker.mjs";
 let input = document.querySelector("input#guess");
 let submitButton = document.querySelector("#submit-button");
 let suggestions = document.querySelector("div#autofill");
-let guesses = document.querySelector("div#guessed-box");
+let guesses = document.querySelector("GuessedBox");
 
 /** @type {Array<import("../../geodle").GeodeMod>} */
 let guessHistory = [];
@@ -62,7 +62,7 @@ function updateHint() {
     }
 
     guess.id = "hint-guess";
-    let hintBox = document.querySelector("#info-box");
+    let hintBox = document.querySelector("InfoBox");
 
     let existing;
     if ((existing = hintBox.querySelector("#hint-guess"))) {

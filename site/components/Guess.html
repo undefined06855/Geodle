@@ -1,4 +1,4 @@
-<div class="guess row-compact">
+<Guess class="row-compact">
     <!--{{
         console.log("created guess:");
         console.log(params);
@@ -149,4 +149,97 @@
             }}-->
         </div>
     </div>
-</div>
+
+    <style>
+        Guess {
+            position: relative;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+
+            padding: 10px 20px;
+
+            background: linear-gradient(0.9turn, #181724, #212031);
+            border: 2px solid #2f2f3b;
+            border-radius: 20px;
+
+            width: 100%;
+            min-height: 170px;
+
+            img {
+                height: 100px;
+            }
+
+            #guess-content {
+                gap: 4px;
+
+                width: 50%;
+                & > * {
+                    width: fit-content;
+                }
+
+                .mod-title {
+                    font-family: "Quicksand", sans-serif;
+                    font-weight: 700;
+                    font-size: 20px;
+
+                    a {
+                        transition: color 0.2s;
+                        &:not(:hover) {
+                            color: inherit;
+                        }
+                    }
+                }
+
+                .mod-id {
+                    font-family: "JetBrains Mono", sans-serif;
+                    font-size: 10px;
+                    align-self: center;
+                }
+
+                .tags {
+                    flex-wrap: wrap;
+                    max-width: 80%;
+
+                    .tag {
+                        border-radius: 5px;
+                        border: 2px solid #3e3e47;
+                        padding: 2px 8px;
+                    }
+                }
+            }
+
+            .right {
+                .download-icon,
+                .version-icon,
+                .update-icon,
+                .release-icon {
+                    background-color: #cd98bd;
+                    width: 25px;
+                    height: 25px;
+                }
+
+                .download-icon {
+                    mask: url("assets/download.svg") center center no-repeat;
+                }
+
+                .version-icon {
+                    mask: url("assets/version.svg") center center no-repeat;
+                }
+
+                .update-icon {
+                    mask: url("assets/clock-pencil.svg") center center no-repeat;
+                }
+
+                .release-icon {
+                    mask: url("assets/clock.svg") center center no-repeat;
+                }
+
+                > * {
+                    text-wrap: nowrap;
+                    font-size: 16px;
+                }
+            }
+        }
+    </style>
+</Guess>
