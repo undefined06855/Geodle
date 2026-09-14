@@ -45,6 +45,11 @@ export default class Geodle {
     async init() {
         this.brain.registerParameterHook({ "Geodle.self": this });
 
+        let userData = await this.queryGeode("/v1/me");
+        if (userData.isErr() || !userData.unwrap()["admin"]) {
+            console.warn("The token provided is either invalid or not an index staff token! Geodle will not work!!");
+        }
+
         Bun.cron(
             "0 0 * * *",
             async () => {
