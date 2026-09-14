@@ -266,7 +266,7 @@ export default class Geodle {
                             developer: mod["developers"][0]["display_name"],
                             developerID: mod["developers"][0]["id"],
                             downloads: mod["download_count"],
-                            updateDate: mod["versions"][0]["updated_at"],
+                            updateDate: mod["versions"][0]["updated_at"] ?? mod["created_at"],
                             releaseDate: mod["created_at"],
                         });
                     },
