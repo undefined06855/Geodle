@@ -137,7 +137,7 @@ export default class Geodle {
                 let res = undefined;
 
                 for (let branchName of branchNames) {
-                    let zipUrl = `${matches[1]}/${matches[2]}/${matches[3]}/archive/refs/heads/main.zip`;
+                    let zipUrl = `${matches[1]}/${matches[2]}/${matches[3]}/archive/refs/heads/${branchName}.zip`;
                     console.info(`evaluated zip url to ${zipUrl}`);
 
                     res = await fetch(zipUrl);

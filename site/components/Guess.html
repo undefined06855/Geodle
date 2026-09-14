@@ -107,9 +107,9 @@
             <!--{{ return abbreviateDownloadCount(params.mod.downloads); }}-->
             <!--{{
                 if (geodleData.mod.downloads > params.mod.downloads) {
-                    return document.createTextNode("&nbsp;&bull;&nbsp;(Higher)");
+                    return document.createTextNode(" • (Higher)");
                 } else if (geodleData.mod.downloads < params.mod.downloads) {
-                    return document.createTextNode("&nbsp;&bull;&nbsp;(Lower)");
+                    return document.createTextNode(" • (Lower)");
                 }
             }}-->
         </div>
@@ -127,9 +127,9 @@
             <!--{{
                 let offset = new Date(params.mod.releaseDate).getTime() - new Date(geodleData.mod.releaseDate).getTime();
                 if (offset < 0) {
-                    return document.createTextNode("&nbsp;&bull;&nbsp;(Newer)");
+                    return document.createTextNode(" • (Newer)");
                 } else if (offset > 0) {
-                    return document.createTextNode("&nbsp;&bull;&nbsp;(Older)");
+                    return document.createTextNode(" • (Older)");
                 }
             }}-->
         </div>
@@ -142,9 +142,9 @@
             <!--{{
                 let offset = new Date(params.mod.updateDate).getTime() - new Date(geodleData.mod.updateDate).getTime();
                 if (offset < 0) {
-                    return document.createTextNode("&nbsp;&bull;&nbsp;(Newer)");
+                    return document.createTextNode(" • (Newer)");
                 } else if (offset > 0) {
-                    return document.createTextNode("&nbsp;&bull;&nbsp;(Older)");
+                    return document.createTextNode(" • (Older)");
                 }
             }}-->
         </div>
