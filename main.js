@@ -16,6 +16,13 @@ const server = Bun.serve({
             return new Response(file, { headers: { "Content-Type": file.type } });
         },
 
+        "/r/:score": {
+            POST: req => {
+                let res = geodle.onSubmitResults(req, server);
+                return res;
+            }
+        },
+
         "/*": req => {
             return brain.generatePage(new URL(req.url).pathname, geodle.getBrainParams());
         },

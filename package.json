@@ -10,6 +10,7 @@
         "typescript": "^7.0.2"
     },
     "dependencies": {
+        "@rabbit-company/rate-limiter": "^3.0.1",
         "@types/unzipper": "^0.10.11",
         "brain": "undefined06855/brain",
         "fuse.js": "^7.5.0",

@@ -4,6 +4,7 @@ import * as jsc from "bun:jsc";
 import * as unzipper from "unzipper";
 import cpp from "highlight.js/lib/languages/cpp";
 import hljs from "highlight.js/lib/core";
+import { RateLimiter } from "@rabbit-company/rate-limiter";
 
 hljs.registerLanguage("cpp", cpp);
 
@@ -34,15 +35,37 @@ export default class Geodle {
     /** @type {Result<GeodleData>} */ data = Result.err("day has not been generated yet");
     /** @type {Array<GeodeMod>} */ mods = [];
 
+    // keep in mind this resets at the start of the new day so this is only for multiple people on the same ip for
+    // whatever reason
+    /** @type {RateLimiter} */ rateLimiter = new RateLimiter({
+        window: 3e+6, // 50 minutes
+        max: 1
+    });
+    /** @type {Object<1 | 2 | 3 | 4 | 5 | 6 | 7 | "X", number>} */ results;
+    /** @type {Geodle["results"]} */ defaultResults;
+
     /**
      * @param {Brain} brain
      */
     constructor(brain) {
         this.brain = brain;
         this.zerothDay = Temporal.PlainDate.from(process.env.ZEROTH_DAY ?? "2000-01-01");
+
+        this.results = this.defaultResults = {
+            "1": 4,
+            "2": 2,
+            "3": 1,
+            "4": 6,
+            "5": 3,
+            "6": 7,
+            "7": 1,
+            "X": 2
+        };
     }
 
     async init() {
+        await this.readResults();
+
         this.brain.registerParameterHook({ "Geodle.self": this });
 
         let userData = await this.queryGeode("/v1/me");
@@ -53,12 +76,73 @@ export default class Geodle {
         Bun.cron(
             "0 0 * * *",
             async () => {
+                let webhookURL = process.env.WEBHOOK_URL;
+                if (webhookURL && this.data.isOk()) {
+                    let data = this.data.unwrap();
+                    let total = Object.values(this.results).reduce((prev, cur) => prev + cur, 0);
+                    let correct = Object.entries(this.results).filter(([k, v]) => k != "X").map(([k, v]) => v).reduce((prev, cur) => prev + cur, 0);
+                    let max = Math.max(...Object.values(this.results));
+
+                    let content = `Wordle #${data.day} on ${data.date.toString()}:\n`;
+                    let squares = { "1": "🟩", "2": "🟩", "3": "🟩", "4": "🟨", "5": "🟨", "6": "🟨", "7": "🟥", "X": "⬛" };
+                    let adjusters = { "1": " ", "2": "", "3": "", "4": "", "5": "", "6": "", "7": " ", "X": "" }
+                    for (let [key, value] of Object.entries(this.results)) {
+
+                        // @ts-ignore
+                        content += `${key}/7: ${adjusters[key]}${squares[key].repeat(Math.ceil(10 * (value / max)))} ${value}\n`;
+                    }
+
+                    content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`
+
+                    await fetch(webhookURL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            username: "Geodle",
+                            avatar_url: "https://geodle.undefined0.dev/pfp.png",
+                            content
+                        })
+                    });
+                }
+
                 this.data = await this.generateToday();
+
+                this.rateLimiter.clear();
+                this.results = structuredClone(this.defaultResults);
             },
             { tz: process.env.TIMEZONE },
         );
 
         this.data = await this.generateToday();
+
+        let webhookURL = process.env.WEBHOOK_URL;
+        if (webhookURL && this.data.isOk()) {
+            let data = this.data.unwrap();
+            let total = Object.values(this.results).reduce((prev, cur) => prev + cur, 0);
+            let correct = Object.entries(this.results).filter(([k, v]) => k != "X").map(([k, v]) => v).reduce((prev, cur) => prev + cur, 0);
+            let max = Math.max(...Object.values(this.results));
+
+            let content = `Wordle #${data.day} on ${data.date.toString()}:\n`;
+            let squares = { "1": "🟩", "2": "🟩", "3": "🟩", "4": "🟨", "5": "🟨", "6": "🟨", "7": "🟥", "X": "⬛" };
+            let adjusters = { "1": " ", "2": "", "3": "", "4": "", "5": "", "6": "", "7": " ", "X": "" }
+            for (let [key, value] of Object.entries(this.results)) {
+
+                // @ts-ignore
+                content += `${key}/7: ${adjusters[key]}${squares[key].repeat(Math.ceil(10 * (value / max)))} ${value}\n`;
+            }
+
+            content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`
+
+            await fetch(webhookURL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: "Geodle",
+                    avatar_url: "https://geodle.undefined0.dev/pfp.png",
+                    content
+                })
+            });
+        }
     }
 
     /**
@@ -271,6 +355,52 @@ export default class Geodle {
         }
 
         return Result.ok(mods);
+    }
+
+    async writeResults() {
+        let file = Bun.file("./results.json");
+        await file.write(JSON.stringify({
+            results: this.results,
+            day: Temporal.Now.plainDateISO(process.env.TIMEZONE).toString()
+        }));
+    }
+
+    async readResults() {
+        let file = Bun.file("./results.json");
+        if (!await file.exists()) return;
+        let data = JSON.parse(await file.text());
+        console.info("existing result data found, checking if it's today's...");
+        if (data.day != Temporal.Now.plainDateISO(process.env.TIMEZONE).toString()) return;
+        console.info("reading existing result data");
+        this.results = data.results;
+    }
+
+    /**
+     * @param {Bun.BunRequest<"/r/:score">} req
+     * @param {Bun.Server<any>} server
+     * @returns {Promise<Response>}
+     */
+    async onSubmitResults(req, server) {
+        let ip = req.headers.get("cf-connecting-ip") ?? server.requestIP(req)?.address;
+        if (ip) {
+            let res = this.rateLimiter.check("/comments", ip);
+            if (res.limited) {
+                return new Response("rate limited")
+            }
+        }
+
+        let result = req.params.score;
+        if (!Object.keys(this.results).includes(result)) {
+            return new Response("invalid");
+        }
+
+        // @ts-ignore
+        this.results[req.params.score]++;
+        await this.writeResults();
+
+        console.debug(`submitted result of ${req.params.score}`);
+
+        return new Response("submitted");
     }
 
     /**
