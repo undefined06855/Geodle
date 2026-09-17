@@ -94,7 +94,7 @@ export default class Geodle {
 
                     content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`
 
-                    await fetch(webhookURL, {
+                    let res = await fetch(webhookURL, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
@@ -103,6 +103,10 @@ export default class Geodle {
                             content
                         })
                     });
+
+                    if (res.status != 200) {
+                        console.error(await res.json());
+                    }
                 }
 
                 this.data = await this.generateToday();
@@ -114,35 +118,6 @@ export default class Geodle {
         );
 
         this.data = await this.generateToday();
-
-        let webhookURL = process.env.WEBHOOK_URL;
-        if (webhookURL && this.data.isOk()) {
-            let data = this.data.unwrap();
-            let total = Object.values(this.results).reduce((prev, cur) => prev + cur, 0);
-            let correct = Object.entries(this.results).filter(([k, v]) => k != "X").map(([k, v]) => v).reduce((prev, cur) => prev + cur, 0);
-            let max = Math.max(...Object.values(this.results));
-
-            let content = `Wordle #${data.day} on ${data.date.toString()}:\n`;
-            let squares = { "1": "🟩", "2": "🟩", "3": "🟩", "4": "🟨", "5": "🟨", "6": "🟨", "7": "🟥", "X": "⬛" };
-            let adjusters = { "1": " ", "2": "", "3": "", "4": "", "5": "", "6": "", "7": " ", "X": "" }
-            for (let [key, value] of Object.entries(this.results)) {
-
-                // @ts-ignore
-                content += `${key}/7: ${adjusters[key]}${squares[key].repeat(Math.ceil(10 * (value / max)))} ${value}\n`;
-            }
-
-            content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`
-
-            await fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: "Geodle",
-                    avatar_url: "https://geodle.undefined0.dev/pfp.png",
-                    content
-                })
-            });
-        }
     }
 
     /**
