@@ -3,7 +3,7 @@
  */
 function calculateRelativeDate(dateString) {
     if (dateString == "????") {
-        return document.createTextNode(dateString)
+        return document.createTextNode(dateString);
     }
 
     let diff = ~~((Date.now() - new Date(dateString).getTime()) / 1000);

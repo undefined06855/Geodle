@@ -9,6 +9,7 @@ Play Geodle at https://geodle.undefined0.dev/!
 1. Clone the repo (obviously)
 1. Install dependencies by running `bun i` in the project folder
 1. Add a `.env` file (or set the environment variables manually) with the following variables:
+
 ```env
 DEBUG=true                  # Whether Brain (the framework) and Bun.serve runs in debug mode
 PORT=8080                   # The port to serve Geodle on
@@ -20,6 +21,7 @@ GEODE_API_ENDPOINT=https://api.geode-sdk.org    # The endpoint that mods are fet
 SEED_OFFSET=                # A string which is appended to another string, both hashed to generate a random number for the mod for the day (this can be used to quickly refresh the Geodle for testing, or to ensure that the official Geodle cannot be exactly recreated by someone else)
 WEBHOOK_URL=                # For the Discord Webhook URL
 ```
+
 1. Run `bun geodle` to start hosting!
 
 This project was created using `bun init` in bun v1.4.2. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

@@ -21,7 +21,7 @@ const server = Bun.serve({
             POST: req => {
                 let res = geodle.onSubmitResults(req, server);
                 return res;
-            }
+            },
         },
 
         // smallified logo
@@ -38,7 +38,7 @@ const server = Bun.serve({
     },
 
     port: process.env.PORT ?? 8080,
-    development: process.env.DEBUG == "true"
+    development: process.env.DEBUG == "true",
 });
 
 console.info(`Geodle started on port ${server.port}!`);

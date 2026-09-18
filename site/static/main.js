@@ -11,9 +11,9 @@ let guesses = document.querySelector("GuessedBox");
 let guessHistory = [];
 
 if (localStorage.getItem("date") == geodleData.day) {
-    guessHistory = JSON.parse(localStorage.getItem("guessHistory") ?? "[]").map(id =>
-        geodleData.allMods.find(mod => mod.id == id),
-    ).filter(mod => mod);
+    guessHistory = JSON.parse(localStorage.getItem("guessHistory") ?? "[]")
+        .map(id => geodleData.allMods.find(mod => mod.id == id))
+        .filter(mod => mod);
 } else {
     localStorage.setItem("date", geodleData.day);
     localStorage.setItem("guessHistory", "[]");
@@ -35,7 +35,6 @@ modLogo.addEventListener("load", () => {
     blurCanvasLoaded = true;
 });
 
-
 function updateHint() {
     /** @type {import("../../geodle").GeodeMod} */
     let hintState = {
@@ -47,7 +46,7 @@ function updateHint() {
         tags: ["????"],
         version: "????",
         updateDate: "????",
-        releaseDate: "????"
+        releaseDate: "????",
     };
 
     // guess 3, metadata (this isn't really helpful in most cases)
@@ -95,7 +94,7 @@ function checkGameOver(fromLastInput = false) {
         document.querySelector("main").appendChild(GameOverBox({ guessHistory }));
 
         if (fromLastInput) {
-            let guesses = guessHistory.length.toString()
+            let guesses = guessHistory.length.toString();
             if (mod.id != geodleData.mod.id) guesses = "X";
             fetch(`/r/${guesses}`, { method: "POST" });
         }
@@ -110,7 +109,7 @@ if (geodleError) {
 const fuse = new FuseWorker(
     geodleData.allMods,
     {
-        keys: [ "name" ],
+        keys: ["name"],
     },
     {
         workerUrl: "./fuse/fuse.worker.mjs",
@@ -164,9 +163,11 @@ input.addEventListener("keydown", async event => {
 });
 
 submitButton.addEventListener("click", () => {
-    input.dispatchEvent(new KeyboardEvent("keydown", {
-        code: "Enter"
-    }));
+    input.dispatchEvent(
+        new KeyboardEvent("keydown", {
+            code: "Enter",
+        }),
+    );
 });
 
 input.focus();

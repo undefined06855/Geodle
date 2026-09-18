@@ -38,8 +38,8 @@ export default class Geodle {
     // keep in mind this resets at the start of the new day so this is only for multiple people on the same ip for
     // whatever reason
     /** @type {RateLimiter} */ rateLimiter = new RateLimiter({
-        window: 3e+6, // 50 minutes
-        max: 1
+        window: 3e6, // 50 minutes
+        max: 1,
     });
     /** @type {Object<1 | 2 | 3 | 4 | 5 | 6 | 7 | "X", number>} */ results;
     /** @type {Geodle["results"]} */ defaultResults;
@@ -52,14 +52,14 @@ export default class Geodle {
         this.zerothDay = Temporal.PlainDate.from(process.env.ZEROTH_DAY ?? "2000-01-01");
 
         this.results = this.defaultResults = {
-            "1": 4,
-            "2": 2,
-            "3": 1,
-            "4": 6,
-            "5": 3,
-            "6": 7,
-            "7": 1,
-            "X": 2
+            1: 4,
+            2: 2,
+            3: 1,
+            4: 6,
+            5: 3,
+            6: 7,
+            7: 1,
+            X: 2,
         };
     }
 
@@ -80,19 +80,21 @@ export default class Geodle {
                 if (webhookURL && this.data.isOk()) {
                     let data = this.data.unwrap();
                     let total = Object.values(this.results).reduce((prev, cur) => prev + cur, 0);
-                    let correct = Object.entries(this.results).filter(([k, v]) => k != "X").map(([k, v]) => v).reduce((prev, cur) => prev + cur, 0);
+                    let correct = Object.entries(this.results)
+                        .filter(([k, v]) => k != "X")
+                        .map(([k, v]) => v)
+                        .reduce((prev, cur) => prev + cur, 0);
                     let max = Math.max(...Object.values(this.results));
 
                     let content = `Wordle #${data.day} on ${data.date.toString()}:\n`;
-                    let squares = { "1": "🟩", "2": "🟩", "3": "🟩", "4": "🟨", "5": "🟨", "6": "🟨", "7": "🟥", "X": "⬛" };
-                    let adjusters = { "1": " ", "2": "", "3": "", "4": "", "5": "", "6": "", "7": " ", "X": "" }
+                    let squares = { 1: "🟩", 2: "🟩", 3: "🟩", 4: "🟨", 5: "🟨", 6: "🟨", 7: "🟥", X: "⬛" };
+                    let adjusters = { 1: " ", 2: "", 3: "", 4: "", 5: "", 6: "", 7: " ", X: "" };
                     for (let [key, value] of Object.entries(this.results)) {
-
                         // @ts-ignore
                         content += `${key}/7: ${adjusters[key]}${squares[key].repeat(Math.ceil(10 * (value / max)))} ${value}\n`;
                     }
 
-                    content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`
+                    content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`;
 
                     let res = await fetch(webhookURL, {
                         method: "POST",
@@ -100,8 +102,8 @@ export default class Geodle {
                         body: JSON.stringify({
                             username: "Geodle",
                             avatar_url: "https://geodle.undefined0.dev/pfp.png",
-                            content
-                        })
+                            content,
+                        }),
                     });
 
                     if (res.status != 200) {
@@ -196,7 +198,7 @@ export default class Geodle {
                     continue;
                 }
 
-                let branchNames = [ "main", "master", "dev" ];
+                let branchNames = ["main", "master", "dev"];
                 let validBranch = false;
                 /** @type {Response | undefined} */
                 let res = undefined;
@@ -207,7 +209,9 @@ export default class Geodle {
 
                     res = await fetch(zipUrl);
                     if (res.status != 200) {
-                        console.warn(`failed to use the branch name ${branchName}, status code ${res.status}, skipping...`);
+                        console.warn(
+                            `failed to use the branch name ${branchName}, status code ${res.status}, skipping...`,
+                        );
                         continue;
                     }
 
@@ -340,15 +344,17 @@ export default class Geodle {
 
     async writeResults() {
         let file = Bun.file("./results.json");
-        await file.write(JSON.stringify({
-            results: this.results,
-            day: Temporal.Now.plainDateISO(process.env.TIMEZONE).toString()
-        }));
+        await file.write(
+            JSON.stringify({
+                results: this.results,
+                day: Temporal.Now.plainDateISO(process.env.TIMEZONE).toString(),
+            }),
+        );
     }
 
     async readResults() {
         let file = Bun.file("./results.json");
-        if (!await file.exists()) return;
+        if (!(await file.exists())) return;
         let data = JSON.parse(await file.text());
         console.info("existing result data found, checking if it's today's...");
         if (data.day != Temporal.Now.plainDateISO(process.env.TIMEZONE).toString()) return;
@@ -366,7 +372,7 @@ export default class Geodle {
         if (ip) {
             let res = this.rateLimiter.check("/comments", ip);
             if (res.limited) {
-                return new Response("rate limited")
+                return new Response("rate limited");
             }
         }
 
