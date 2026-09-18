@@ -16,11 +16,20 @@ const server = Bun.serve({
             return new Response(file, { headers: { "Content-Type": file.type } });
         },
 
+        // result
         "/r/:score": {
             POST: req => {
                 let res = geodle.onSubmitResults(req, server);
                 return res;
             }
+        },
+
+        // smallified logo
+        "/s/:id/:size": async req => {
+            let size = parseInt(req.params.size);
+            if (isNaN(size) || size > 10 || size < 0) size = 3;
+            let icon = await fetch(`https://api.geode-sdk.org/v1/mods/${req.params.id}/logo`);
+            return new Response(await (await icon.blob()).image().resize(size, size).blob());
         },
 
         "/*": req => {

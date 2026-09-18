@@ -23,6 +23,19 @@ for (let mod of guessHistory) {
     guesses.appendChild(Guess({ mod }));
 }
 
+let blurCanvasLoaded = false;
+let blurCanvas = document.createElement("canvas");
+blurCanvas.width = 3;
+blurCanvas.height = 3;
+let blurCtx = blurCanvas.getContext("2d");
+let modLogo = new Image();
+modLogo.src = `https://api.geode-sdk.org/v1/mods/${geodleData.mod.id}/logo`;
+modLogo.addEventListener("load", () => {
+    blurCtx.drawImage(modLogo, 0, 3, 3, 3);
+    blurCanvasLoaded = true;
+});
+
+
 function updateHint() {
     /** @type {import("../../geodle").GeodeMod} */
     let hintState = {
@@ -57,8 +70,8 @@ function updateHint() {
     // guess 5+, mod icon but blurred
     if (guessHistory.length >= 5) {
         let icon = guess.querySelector("#mod-icon");
-        icon.src = `https://api.geode-sdk.org/v1/mods/${geodleData.mod.id}/logo`;
-        icon.style.filter = `blur(${12 - guessHistory.length*2}px)`;
+        icon.src = `/s/${geodleData.mod.id}/${guessHistory.length - 2}`;
+        icon.style.imageRendering = "crisp-edges";
     }
 
     guess.id = "hint-guess";
