@@ -165,6 +165,10 @@ export default class Geodle {
             mods = Array.from(new Set(mods).values());
             mods.sort((a, b) => a.id.localeCompare(b.id));
 
+            if (today.toString() == "2026-09-18") {
+                mods = mods.filter(mod => mod.id == "dulak.whoaddedthis");
+            }
+
             let validMod = false;
             modLoop: while (!validMod) {
                 if (mods.length == 0) {
