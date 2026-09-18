@@ -162,6 +162,8 @@ export default class Geodle {
             console.info(
                 `chosen developer index ${developerIndex}, developer #${developer}, they have ${mods.length} mods`,
             );
+            mods = Array.from(new Set(mods).values());
+            mods.sort((a, b) => a.id.localeCompare(b.id));
 
             let validMod = false;
             modLoop: while (!validMod) {
