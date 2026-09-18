@@ -72,7 +72,7 @@ function updateHint() {
     hintBox.appendChild(guess);
 }
 
-function checkGameOver() {
+function checkGameOver(fromLastInput = false) {
     if (guessHistory.length == 0) return;
 
     let mod = guessHistory[guessHistory.length - 1];
@@ -80,6 +80,12 @@ function checkGameOver() {
         input.disabled = "yeah";
         submitButton.disabled = "yep";
         document.querySelector("main").appendChild(GameOverBox({ guessHistory }));
+
+        if (fromLastInput) {
+            let guesses = guessHistory.length.toString()
+            if (mod.id != geodleData.mod.id) guesses = "X";
+            fetch(`/r/${guesses}`, { method: "POST" });
+        }
     }
 }
 
@@ -91,7 +97,7 @@ if (geodleError) {
 const fuse = new FuseWorker(
     geodleData.allMods,
     {
-        keys: ["id", "name", "developer"],
+        keys: [ "name" ],
     },
     {
         workerUrl: "./fuse/fuse.worker.mjs",
@@ -137,7 +143,7 @@ input.addEventListener("keydown", async event => {
     guessHistory.push(mod);
     localStorage.setItem("guessHistory", JSON.stringify(guessHistory.map(guess => guess.id)));
 
-    checkGameOver();
+    checkGameOver(true);
     updateHint();
 
     suggestions.innerHTML = "";
