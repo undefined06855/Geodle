@@ -52,14 +52,14 @@ export default class Geodle {
         this.zerothDay = Temporal.PlainDate.from(process.env.ZEROTH_DAY ?? "2000-01-01");
 
         this.results = this.defaultResults = {
-            1: 4,
-            2: 2,
-            3: 1,
-            4: 6,
-            5: 3,
-            6: 7,
-            7: 1,
-            X: 2,
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            X: 0,
         };
     }
 
@@ -106,9 +106,9 @@ export default class Geodle {
                         }),
                     });
 
-                    if (res.status != 200) {
+                    try {
                         console.error(await res.json());
-                    }
+                    } catch(_) {}
                 }
 
                 this.data = await this.generateToday();
@@ -368,7 +368,7 @@ export default class Geodle {
      * @returns {Promise<Response>}
      */
     async onSubmitResults(req, server) {
-        let ip = req.headers.get("cf-connecting-ip") ?? server.requestIP(req)?.address;
+        let ip = req.headers.get("x-forwarded-for") ?? server.requestIP(req)?.address;
         if (ip) {
             let res = this.rateLimiter.check("/comments", ip);
             if (res.limited) {
