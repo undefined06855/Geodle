@@ -370,6 +370,7 @@ export default class Geodle {
     async onSubmitResults(req, server) {
         let ip = req.headers.get("x-forwarded-for") ?? server.requestIP(req)?.address;
         if (ip) {
+            console.info(ip, req.headers);
             let res = this.rateLimiter.check("/comments", ip);
             if (res.limited) {
                 return new Response("rate limited");
