@@ -137,6 +137,7 @@ export default class Geodle {
         let allModsRes = await this.fetchAllMods();
         if (allModsRes.isErr()) return allModsRes.forceErr();
         this.mods = allModsRes.unwrap();
+        this.mods.sort((a, b) => a.id.localeCompare(b.id));
         console.info(`we have ${this.mods.length} mods on the index`);
 
         // seed the rng with the current day
@@ -160,16 +161,15 @@ export default class Geodle {
             let developer = developers[developerIndex];
             if (!developer) return Result.err("unreachable");
 
+            if (today.toString() == "2026-09-19") {
+                developer = developers.find(dev => dev == 852);
+            }
+
             let mods = this.mods.filter(mod => mod.developerID == developer);
             console.info(
                 `chosen developer index ${developerIndex}, developer #${developer}, they have ${mods.length} mods`,
             );
             mods = Array.from(new Set(mods).values());
-            mods.sort((a, b) => a.id.localeCompare(b.id));
-
-            if (today.toString() == "2026-09-18") {
-                mods = mods.filter(mod => mod.id == "dulak.whoaddedthis");
-            }
 
             let validMod = false;
             modLoop: while (!validMod) {
@@ -259,6 +259,11 @@ export default class Geodle {
                     }
 
                     let fileIndex = ~~(Math.random() * files.length);
+
+                    if (today.toString() == "2026-09-19") {
+                        fileIndex = 31;
+                    }
+
                     let file = files[fileIndex];
                     files.splice(fileIndex, 1);
 
@@ -278,6 +283,11 @@ export default class Geodle {
 
                     let start = ~~(Math.random() * (lines.length - lineCount - 1));
                     let end = start + lineCount;
+
+                    if (today.toString() == "2026-09-19") {
+                        start = 23;
+                        end = 48;
+                    }
 
                     console.info(`choosing from line ${start} to ${end}`);
                     fileContents = lines.slice(start, end).join("\n");
@@ -370,7 +380,6 @@ export default class Geodle {
     async onSubmitResults(req, server) {
         let ip = req.headers.get("x-forwarded-for") ?? server.requestIP(req)?.address;
         if (ip) {
-            console.info(ip, req.headers);
             let res = this.rateLimiter.check("/comments", ip);
             if (res.limited) {
                 return new Response("rate limited");
