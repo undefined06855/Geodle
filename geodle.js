@@ -307,11 +307,12 @@ export default class Geodle {
         if (!mod || !today || !fileContents) return Result.err("unreachable");
 
         // replace mod name in contents (https://stackoverflow.com/a/7313402)
-        fileContents = fileContents.replaceAll(new RegExp(mod.name, "ig"), modNameCensor);
-        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll(" ", ""), "ig"), modNameCensor);
-        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll(" ", "_"), "ig"), modNameCensor);
-        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll(" ", "-"), "ig"), modNameCensor);
-        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll("-", ""), "ig"), modNameCensor);
+        let sanitized = this.sanitizeForRegex(mod.name);
+        sanitized = sanitized.replaceAll(/[^a-zA-Z0-9 ]/g, "").replace(/s$/, ""); // remove special characters and plural
+        fileContents = fileContents.replaceAll(new RegExp(sanitized, "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(sanitized.replaceAll(" ", ""), "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(sanitized.replaceAll(" ", "_"), "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(sanitized.replaceAll(" ", "-"), "ig"), modNameCensor);
 
         return Result.ok({
             date: today,
@@ -319,6 +320,14 @@ export default class Geodle {
             mod: mod,
             code: fileContents,
         });
+    }
+
+    /**
+     * https://gist.github.com/vbarbarosh/a4eb5960bfe9c283b2ff64004d89e4a3
+     * @param {string} str
+     */
+    sanitizeForRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     }
 
     /**
