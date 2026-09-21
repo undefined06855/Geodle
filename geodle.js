@@ -6,7 +6,23 @@ import cpp from "highlight.js/lib/languages/cpp";
 import hljs from "highlight.js/lib/core";
 import { RateLimiter } from "@rabbit-company/rate-limiter";
 
-hljs.registerLanguage("cpp", cpp);
+const modNameCensor = "[********]";
+
+/**
+ * @type {import("highlight.js").LanguageFn}
+ */
+const cppWithMoreShit = hljs => {
+    let ret = cpp(hljs);
+
+    ret.contains.unshift({
+        begin: modNameCensor,
+        skip: true
+    })
+
+    return ret;
+}
+
+hljs.registerLanguage("cpp", cppWithMoreShit);
 
 /**
  * @typedef GeodleData
@@ -289,6 +305,13 @@ export default class Geodle {
         console.timeEnd("generating day");
 
         if (!mod || !today || !fileContents) return Result.err("unreachable");
+
+        // replace mod name in contents (https://stackoverflow.com/a/7313402)
+        fileContents = fileContents.replaceAll(new RegExp(mod.name, "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll(" ", ""), "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll(" ", "_"), "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll(" ", "-"), "ig"), modNameCensor);
+        fileContents = fileContents.replaceAll(new RegExp(mod.name.replaceAll("-", ""), "ig"), modNameCensor);
 
         return Result.ok({
             date: today,
