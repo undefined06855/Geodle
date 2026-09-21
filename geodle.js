@@ -161,10 +161,6 @@ export default class Geodle {
             let developer = developers[developerIndex];
             if (!developer) return Result.err("unreachable");
 
-            if (today.toString() == "2026-09-19") {
-                developer = developers.find(dev => dev == 852);
-            }
-
             let mods = this.mods.filter(mod => mod.developerID == developer);
             console.info(
                 `chosen developer index ${developerIndex}, developer #${developer}, they have ${mods.length} mods`,
@@ -260,10 +256,6 @@ export default class Geodle {
 
                     let fileIndex = ~~(Math.random() * files.length);
 
-                    if (today.toString() == "2026-09-19") {
-                        fileIndex = 31;
-                    }
-
                     let file = files[fileIndex];
                     files.splice(fileIndex, 1);
 
@@ -283,11 +275,6 @@ export default class Geodle {
 
                     let start = ~~(Math.random() * (lines.length - lineCount - 1));
                     let end = start + lineCount;
-
-                    if (today.toString() == "2026-09-19") {
-                        start = 23;
-                        end = 48;
-                    }
 
                     console.info(`choosing from line ${start} to ${end}`);
                     fileContents = lines.slice(start, end).join("\n");
