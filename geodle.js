@@ -92,6 +92,8 @@ export default class Geodle {
         Bun.cron(
             "0 0 * * *",
             async () => {
+                let nextGeodleUnix = ~~(new Date().getTime() / 1000) + 86400;
+
                 let webhookURL = process.env.WEBHOOK_URL;
                 if (webhookURL && this.data.isOk()) {
                     let data = this.data.unwrap();
@@ -110,7 +112,8 @@ export default class Geodle {
                         content += `${key}/7: ${adjusters[key]}${squares[key].repeat(Math.ceil(10 * (value / max)))} ${value}\n`;
                     }
 
-                    content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!`;
+                    content += `${total} people guessed, with ${total == correct ? "everyone" : correct} guessing the answer, [${data.mod.name}](<https://geode-sdk.org/mods/${data.mod.id}>)!\n`;
+                    content += `Next Geodle <t:${nextGeodleUnix}:R>. Play it at <https://geodle.undefined0.dev/>!`;
 
                     let res = await fetch(webhookURL, {
                         method: "POST",
