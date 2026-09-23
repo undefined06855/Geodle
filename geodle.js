@@ -104,7 +104,7 @@ export default class Geodle {
                         .reduce((prev, cur) => prev + cur, 0);
                     let max = Math.max(...Object.values(this.results));
 
-                    let content = `Wordle #${data.day} on ${data.date.toString()}:\n`;
+                    let content = `Geodle #${data.day} on ${data.date.toString()}:\n`;
                     let squares = { 1: "🟩", 2: "🟩", 3: "🟩", 4: "🟨", 5: "🟨", 6: "🟨", 7: "🟥", X: "⬛" };
                     let adjusters = { 1: " ", 2: "", 3: "", 4: "", 5: "", 6: "", 7: " ", X: "" };
                     for (let [key, value] of Object.entries(this.results)) {
